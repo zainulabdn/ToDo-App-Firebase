@@ -1,0 +1,11 @@
+{
+ "workbench.colorCustomizations": {
+  "[Material Theme Darker]": {
+   "statusBar.debuggingBackground": "#212121"
+  },
+  "activityBar.background": "#570C44",
+  "titleBar.activeBackground": "#7A115F",
+  "titleBar.activeForeground": "#FFFCFE"
+ },
+ "dart.flutterSdkPath": "C:\\src3.10.3\\flutter"
+}
