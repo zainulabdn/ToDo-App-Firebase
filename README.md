@@ -1,2 +1,12 @@
-# ToDo-App-Firebase
- Todo application in flutter firebase (CRUD)
+# Hi, I'm Zain! 👋
+# Flutter Todo App
+
+Flutter Todo App is a  simple Flutter application that is used to store your daily tasks.
+
+
+
+## Authors
+
+- [@Zain](https://www.github.com/zainulabdn)
+
+---
