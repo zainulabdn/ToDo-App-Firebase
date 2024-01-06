@@ -58,6 +58,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   CustomTextField(
                     prefixIcon: const Icon(
                       Icons.person,
+                      size: 20,
                       color: kPrimaryColor,
                     ),
                     controller: nameController,
@@ -68,6 +69,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     prefixIcon: const Icon(
                       Icons.alternate_email,
                       color: kPrimaryColor,
+                      size: 20,
                     ),
                     controller: emailController,
                     hintText: 'Email',
@@ -76,6 +78,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   CustomTextField(
                     prefixIcon: const Icon(
                       Icons.lock_open,
+                      size: 20,
                       color: kPrimaryColor,
                     ),
                     controller: passController,
@@ -86,6 +89,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         signupProvider.togglePasswordVisibility();
                       },
                       icon: Icon(
+                        size: 20,
                         signupProvider.isPasswordVisible
                             ? Icons.visibility
                             : Icons.visibility_off,
@@ -97,6 +101,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   CustomTextField(
                     prefixIcon: const Icon(
                       Icons.lock_open,
+                      size: 20,
                       color: kPrimaryColor,
                     ),
                     controller: conPassController,
@@ -107,6 +112,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         signupProvider.togglePasswordVisibility();
                       },
                       icon: Icon(
+                        size: 20,
                         signupProvider.isPasswordVisible
                             ? Icons.visibility
                             : Icons.visibility_off,

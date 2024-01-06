@@ -37,7 +37,7 @@ class TaskProvider extends ChangeNotifier {
       dialog.show();
       await _firestore.collection('tasks').add({
         'title': title,
-        'description': description ?? '',
+        'description': description,
         'uid': user?.uid,
         'done': false,
         'create_at': DateTime.now(),
@@ -45,7 +45,7 @@ class TaskProvider extends ChangeNotifier {
       });
       // DateTime taskAddedTime = DateTime.now();
       // DateTime notificationTime = taskAddedTime.add(const Duration(minutes: 1));
-      print(selectedDueDate);
+      debugPrint(selectedDueDate?.day.toString() ?? '');
       await LocalNotificationService().scheduleNotification(
         id: 1,
         title: 'Task Reminder',
@@ -67,7 +67,7 @@ class TaskProvider extends ChangeNotifier {
     try {
       await _firestore.collection('tasks').doc(taskId).delete();
     } catch (e) {
-      print('Error deleting task: $e');
+      debugPrint('Error deleting task: $e');
       rethrow;
     }
   }
@@ -81,9 +81,9 @@ class TaskProvider extends ChangeNotifier {
         .collection('tasks')
         .doc(taskId)
         .update({'done': newStatus}).then((value) {
-      print('Task status updated successfully');
+      debugPrint('Task status updated successfully');
     }).catchError((error) {
-      print('Failed to update task status: $error');
+      debugPrint('Failed to update task status: $error');
     });
   }
 
@@ -110,14 +110,14 @@ class TaskProvider extends ChangeNotifier {
         if (snapshot.exists) {
           final data = snapshot.data() as Map<String, dynamic>;
           final name = data['name'];
-          print('>>>>>>>>>>>>>>>>>>>>>>>>>>>>');
-          print(name);
+          debugPrint('>>>>>>>>>>>>>>>>>');
+          debugPrint(name);
           username = name;
           notifyListeners();
         }
       }
     } catch (e) {
-      print('Error getting user name: $e');
+      debugPrint('Error getting user name: $e');
       rethrow;
     }
   }
@@ -128,7 +128,6 @@ class TaskProvider extends ChangeNotifier {
   }
 
   void updateUserData() {
-    print(username);
     final userCollection = FirebaseFirestore.instance.collection('users');
     final userDoc = userCollection.doc(user?.uid);
 
@@ -146,15 +145,14 @@ class TaskProvider extends ChangeNotifier {
       CustomSnackBar.showSuccess('Logout successfully');
       Get.offAll(() => const LoginScreen());
     } catch (e) {
-      print('Error signing out: $e');
+      debugPrint('Error signing out: $e');
       rethrow;
     }
   }
 
   void fetchTasks() {
     Query query = _firestore.collection('tasks');
-    print('>>>>>>>>>>>>>>>>>>');
-    print(TaskFilter);
+    debugPrint('>>>>>>>>>>>>>>>>>>');
     final currentUserUid = FirebaseAuth.instance.currentUser?.uid;
     if (currentUserUid != null) {
       query = query.where('uid', isEqualTo: currentUserUid);
