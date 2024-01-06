@@ -1,9 +1,7 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:haztech_task/Core/Constants/colors.dart';
-import 'package:haztech_task/Core/Constants/strings.dart';
 import 'package:haztech_task/Core/providers/signup_provider.dart';
 import 'package:haztech_task/Core/providers/task_provider.dart';
 import 'package:haztech_task/UI/Screens/Authentication/login_screen.dart';

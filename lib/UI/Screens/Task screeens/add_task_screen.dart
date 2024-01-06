@@ -7,7 +7,6 @@ import 'package:haztech_task/UI/custom_widgets/custom_textfield.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
-
 class AddTaskScreen extends StatefulWidget {
   const AddTaskScreen({Key? key}) : super(key: key);
 
@@ -24,7 +23,11 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
     return Consumer<TaskProvider>(builder: (context, taskProvider, child) {
       return Scaffold(
         appBar: AppBar(
-          title: const Text('Adding  Task Screen'),
+          backgroundColor: Colors.transparent,
+          title: const Text(
+            'Add Task',
+            style: TextStyle(color: kBlack),
+          ),
         ),
         body: SingleChildScrollView(
           child: Padding(

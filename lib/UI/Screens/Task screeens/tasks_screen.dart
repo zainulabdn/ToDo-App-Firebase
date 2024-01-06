@@ -28,7 +28,7 @@ class _TasksScreenState extends State<TasksScreen> {
     super.initState();
     notificationServices.requestNotificationPermission();
     notificationServices.getDeviceToken().then((value) {
-      print('Device token');
+      print('======Device token======');
       print(value);
     });
   }
@@ -45,9 +45,7 @@ class _TasksScreenState extends State<TasksScreen> {
               const SizedBox(height: 30),
               Row(
                 children: [
-                  const CircleAvatar(
-                    child: Icon(Icons.person),
-                  ),
+                  const CircleAvatar(child: Icon(Icons.person)),
                   const SizedBox(width: 10),
                   const Text('Hello '),
                   taskProvider.username == null

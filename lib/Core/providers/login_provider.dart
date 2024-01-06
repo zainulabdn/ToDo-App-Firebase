@@ -36,7 +36,9 @@ class LoginProvider extends ChangeNotifier {
       rethrow;
     }
   }
-  Future<void> sendPasswordResetEmail(String email, BuildContext context) async {
+
+  Future<void> sendPasswordResetEmail(
+      String email, BuildContext context) async {
     ProgressDialog dialog = ProgressDialog(context,
         title: const Text('Loading'), message: const Text('Please wait'));
     try {

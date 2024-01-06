@@ -96,7 +96,6 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                     ),
                   ),
-
                   const SizedBox(height: 20.0),
                   MyButtonLong(
                       name: 'Sign In',
@@ -110,17 +109,17 @@ class _LoginScreenState extends State<LoginScreen> {
                             emailController.text, passController.text, context);
                       }),
                   const SizedBox(height: 20.0),
-                  // Row(
-                  //   children: const [
-                  //     SizedBox(width: 20),
-                  //     Expanded(child: Divider(color: kBlack)),
-                  //     SizedBox(width: 20),
-                  //     Text('OR'),
-                  //     SizedBox(width: 20),
-                  //     Expanded(child: Divider(color: kBlack)),
-                  //     SizedBox(width: 20),
-                  //   ],
-                  // ),
+                  const Row(
+                    children: [
+                      SizedBox(width: 20),
+                      Expanded(child: Divider(color: kBlack)),
+                      SizedBox(width: 20),
+                      Text('OR'),
+                      SizedBox(width: 20),
+                      Expanded(child: Divider(color: kBlack)),
+                      SizedBox(width: 20),
+                    ],
+                  ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
