@@ -4,7 +4,6 @@ import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:haztech_task/Core/Constants/colors.dart';
 import 'package:haztech_task/Core/providers/signup_provider.dart';
 import 'package:haztech_task/Core/providers/task_provider.dart';
-import 'package:haztech_task/UI/Screens/Authentication/login_screen.dart';
 import 'package:haztech_task/UI/Screens/Splash%20Screen/splash_screen.dart';
 import 'package:haztech_task/UI/Screens/introduction_screen.dart';
 import 'package:provider/provider.dart';

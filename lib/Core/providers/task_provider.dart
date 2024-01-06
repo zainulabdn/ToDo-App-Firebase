@@ -6,7 +6,6 @@ import 'package:haztech_task/UI/Screens/Authentication/login_screen.dart';
 import 'package:haztech_task/UI/custom_widgets/custom_snackbars.dart';
 import 'package:ndialog/ndialog.dart';
 import 'package:get/get.dart';
-
 import '../Models/task_model.dart';
 import '../enums/task_filter.dart';
 import '../services/local_notification.dart';
