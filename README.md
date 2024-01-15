@@ -5,8 +5,3 @@ Flutter Todo App is a  simple Flutter application that is used to store your dai
 
 
 
-## Authors
-
-- [@Zain](https://www.github.com/zainulabdn)
-
----
