@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_navigation/get_navigation.dart';
 import 'package:haztech_task/Core/Constants/colors.dart';
 import 'package:haztech_task/Core/providers/task_provider.dart';
 import 'package:haztech_task/UI/custom_widgets/custom_buttons.dart';
@@ -23,6 +25,11 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
     return Consumer<TaskProvider>(builder: (context, taskProvider, child) {
       return Scaffold(
         appBar: AppBar(
+          leading: InkWell(
+              onTap: () {
+                Get.back();
+              },
+              child: const Icon(Icons.arrow_back, color: kBlack)),
           backgroundColor: Colors.transparent,
           title: const Text(
             'Add Task',

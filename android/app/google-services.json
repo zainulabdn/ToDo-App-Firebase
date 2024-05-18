@@ -1,36 +1,26 @@
 {
   "project_info": {
-    "project_number": "402802944322",
-    "project_id": "haztech-task",
-    "storage_bucket": "haztech-task.appspot.com"
+    "project_number": "1064816527632",
+    "project_id": "todo-app-30859",
+    "storage_bucket": "todo-app-30859.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:402802944322:android:019fb0cf6f9a9defc8c0db",
+        "mobilesdk_app_id": "1:1064816527632:android:1770a366892bc6a0d7fd95",
         "android_client_info": {
           "package_name": "com.example.haztech_task"
         }
       },
-      "oauth_client": [
-        {
-          "client_id": "402802944322-cpstjhdueftfl1urivu5kq8eads31efd.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
+      "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyBeV86QHupAm1gxWYR3m03wKnCJje4nDhI"
+          "current_key": "AIzaSyBKgTvDHhZYNRGzUTJQPePA6MTl1ogmTkQ"
         }
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "402802944322-cpstjhdueftfl1urivu5kq8eads31efd.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
+          "other_platform_oauth_client": []
         }
       }
     }

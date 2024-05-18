@@ -28,8 +28,8 @@ class _TasksScreenState extends State<TasksScreen> {
     super.initState();
     notificationServices.requestNotificationPermission();
     notificationServices.getDeviceToken().then((value) {
-      print('======Device token======');
-      print(value);
+      debugPrint('======Device token======');
+      debugPrint(value);
     });
   }
 
@@ -212,6 +212,10 @@ class _TasksScreenState extends State<TasksScreen> {
                       );
                     } else if (snapshot.hasError) {
                       return Text('Error: ${snapshot.error}');
+                    } else if (!snapshot.hasData) {
+                      return const Center(
+                          child: Text('no data found',
+                              style: TextStyle(color: kBlack, fontSize: 20)));
                     } else {
                       return const Center(child: CircularProgressIndicator());
                     }
@@ -223,7 +227,8 @@ class _TasksScreenState extends State<TasksScreen> {
         ),
         floatingActionButton: FloatingActionButton(
             onPressed: () {
-              Get.to(() => const AddTaskScreen());
+              Get.to(() => const AddTaskScreen(),
+                  transition: Transition.leftToRight);
             },
             child: const Icon(Icons.add)),
       );
