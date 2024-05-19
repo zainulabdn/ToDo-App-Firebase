@@ -65,16 +65,12 @@ class _MyIntroductionScreenState extends State<MyIntroductionScreen> {
             onTap: () {
               Get.off(() => const LoginScreen());
             }),
-        next: const Icon(
-          Icons.arrow_forward,
-          color: kPrimaryColor,
-          size: 30,
-        ),
-        done: const Text(
-          'Continue',
-          style: TextStyle(
-              fontSize: 17, color: kPrimaryColor, fontWeight: FontWeight.bold),
-        ),
+        next: const Icon(Icons.arrow_forward, color: kPrimaryColor, size: 30),
+        done: const Text('Continue',
+            style: TextStyle(
+                fontSize: 17,
+                color: kPrimaryColor,
+                fontWeight: FontWeight.bold)),
         onDone: () {
           Get.off(() => const LoginScreen());
         },
