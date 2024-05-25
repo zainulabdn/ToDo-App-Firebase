@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:haztech_task/Core/Constants/assets.dart';
 import 'package:haztech_task/UI/Screens/Authentication/login_screen.dart';
+import 'package:haztech_task/UI/Screens/welcome/welcome_screen.dart';
+import 'package:lottie/lottie.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -35,7 +38,7 @@ class _SplashScreenState extends State<SplashScreen>
       if (status == AnimationStatus.completed) {
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => const LoginScreen()),
+          MaterialPageRoute(builder: (context) => const WelComeScreen()),
         );
       }
     });
@@ -44,11 +47,14 @@ class _SplashScreenState extends State<SplashScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: FadeTransition(
-        opacity: _animation,
-        child: const Center(
-          child: FlutterLogo(size: 150.0, style: FlutterLogoStyle.stacked),
-        ),
+      // body: FadeTransition(
+      //   opacity: _animation,
+      //   child: const Center(
+      //     child: FlutterLogo(size: 150.0, style: FlutterLogoStyle.stacked),
+      //   ),
+      // ),
+      body: Center(
+        child: Lottie.asset(Assets.splashAnimation),
       ),
     );
   }

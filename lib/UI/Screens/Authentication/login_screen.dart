@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/get_navigation.dart';
+import 'package:haztech_task/Core/Constants/extension.dart';
 import 'package:haztech_task/UI/Screens/Authentication/forgot_passwprd_screen.dart';
 import 'package:haztech_task/UI/Screens/Authentication/signup_screen.dart';
 import 'package:haztech_task/UI/custom_widgets/custom_buttons.dart';
@@ -33,17 +34,15 @@ class _LoginScreenState extends State<LoginScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const SizedBox(height: 30),
+                  30.heightBox,
                   const Center(
-                    child: Text(
-                      'Hello Again!',
-                      style: TextStyle(
-                          fontSize: 30,
-                          fontWeight: FontWeight.w700,
-                          color: kBlack),
-                    ),
+                    child: Text('Hello Again!',
+                        style: TextStyle(
+                            fontSize: 30,
+                            fontWeight: FontWeight.w700,
+                            color: kBlack)),
                   ),
-                  const SizedBox(height: 5.0),
+                  5.heightBox,
                   const Center(
                     child: Padding(
                       padding: EdgeInsets.symmetric(horizontal: 40.0),
@@ -54,7 +53,13 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                     ),
                   ),
-                  const SizedBox(height: 70),
+                  70.heightBox,
+                  const Text('Login',
+                      style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold)),
+                  20.heightBox,
                   CustomTextField(
                     prefixIcon: const Icon(
                       Icons.alternate_email,
@@ -63,7 +68,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     controller: emailController,
                     hintText: 'Email',
                   ),
-                  const SizedBox(height: 15),
+                  15.heightBox,
                   CustomTextField(
                     prefixIcon: const Icon(
                       Icons.lock_open,

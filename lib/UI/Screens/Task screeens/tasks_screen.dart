@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:haztech_task/Core/Constants/assets.dart';
 import 'package:haztech_task/Core/Constants/colors.dart';
 import 'package:haztech_task/Core/enums/task_sorting.dart';
 import 'package:haztech_task/Core/notification_services.dart';
@@ -37,65 +39,111 @@ class _TasksScreenState extends State<TasksScreen> {
   Widget build(BuildContext context) {
     return Consumer<TaskProvider>(builder: (context, taskProvider, child) {
       return Scaffold(
+        appBar: AppBar(
+          centerTitle: false,
+          toolbarHeight: 50,
+          actions: [
+            IconButton(
+                onPressed: () {
+                  Get.bottomSheet(
+                    SettingsBottomSheet(
+                      username: taskProvider.username.toString(),
+                      onUsernameChanged: (value) {
+                        taskProvider.updateUsername(value);
+                      },
+                      onUpdatePressed: () {
+                        taskProvider.updateUserData();
+                        Get.back();
+                      },
+                      onLogoutPressed: () {
+                        taskProvider.logout();
+                        Get.back();
+                      },
+                    ),
+                    backgroundColor: Colors.white,
+                  );
+                },
+                icon: const Icon(Icons.settings, color: Colors.black)),
+          ],
+          leading: const Padding(
+              padding: EdgeInsets.all(8.0),
+              child: CircleAvatar(child: Icon(Icons.person))),
+          title: Row(
+            children: [
+              const Text(
+                'Hello ',
+                style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold),
+              ),
+              taskProvider.username == null
+                  ? const CircularProgressIndicator()
+                  : Text(
+                      taskProvider.username.toString(),
+                      style: const TextStyle(
+                        color: kPrimaryColor,
+                        fontSize: 17,
+                      ),
+                    ),
+            ],
+          ),
+        ),
         body: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const SizedBox(height: 30),
-              Row(
-                children: [
-                  const CircleAvatar(child: Icon(Icons.person)),
-                  const SizedBox(width: 10),
-                  const Text('Hello '),
-                  taskProvider.username == null
-                      ? const CircularProgressIndicator()
-                      : Text(
-                          taskProvider.username.toString(),
-                          style: const TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                              color: kBlack),
-                        ),
-                  const Spacer(),
-                  IconButton(
-                      onPressed: () {
-                        Get.bottomSheet(
-                          SettingsBottomSheet(
-                            username: taskProvider.username.toString(),
-                            onUsernameChanged: (value) {
-                              taskProvider.updateUsername(value);
-                            },
-                            onUpdatePressed: () {
-                              taskProvider.updateUserData();
-                              Get.back();
-                            },
-                            onLogoutPressed: () {
-                              taskProvider.logout();
-                              Get.back();
-                            },
-                          ),
-                          backgroundColor: Colors.white,
-                        );
-                      },
-                      icon: const Icon(Icons.settings)),
-                ],
+              const SizedBox(height: 10),
+              const Text(
+                'Quote Of The Day:',
+                style: TextStyle(
+                    color: kPrimaryColor, fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(height: 10),
+              Container(
+                width: Get.width,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20), color: kWhite),
+                child: Column(
+                  children: [
+                    const SizedBox(height: 10),
+                    Image.asset(
+                      Assets.quotesCommas,
+                      height: 25,
+                      width: 25,
+                    ),
+                    const SizedBox(height: 10),
+                    Text(
+                      'You don\'t have to be great to start,',
+                      style: GoogleFonts.eduTasBeginner(fontSize: 18),
+                    ),
+                    Text(
+                      'but you have to start to be great',
+                      style: GoogleFonts.eduTasBeginner(fontSize: 18),
+                    ),
+                    const SizedBox(height: 10),
+                    Text(
+                      '- Zig Ziglar',
+                      style: GoogleFonts.nanumMyeongjo(fontSize: 12),
+                    ),
+                    const SizedBox(height: 15),
+                  ],
+                ),
               ),
               const SizedBox(height: 20),
-              const Text(
-                'ToDos',
-                style: TextStyle(
-                    fontSize: 22,
-                    fontWeight: FontWeight.bold,
-                    color: kPrimaryColor),
-              ),
+              const Text('ToDos:',
+                  style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: kPrimaryColor)),
               const SizedBox(height: 20),
               const Row(
                 children: [
                   Text(
                     'Filter By',
                     style: TextStyle(
-                        fontSize: 18,
+                        fontSize: 15,
                         fontWeight: FontWeight.bold,
                         color: kBlack),
                   ),
@@ -103,7 +151,7 @@ class _TasksScreenState extends State<TasksScreen> {
                   Text(
                     'Sorted By',
                     style: TextStyle(
-                        fontSize: 18,
+                        fontSize: 15,
                         fontWeight: FontWeight.bold,
                         color: kBlack),
                   ),
@@ -130,7 +178,10 @@ class _TasksScreenState extends State<TasksScreen> {
                       }
                       return DropdownMenuItem<TaskFilter>(
                         value: filter,
-                        child: Text(filterText),
+                        child: Text(
+                          filterText,
+                          style: const TextStyle(fontSize: 13),
+                        ),
                       );
                     }).toList(),
                   ),
@@ -154,12 +205,16 @@ class _TasksScreenState extends State<TasksScreen> {
                       }
                       return DropdownMenuItem<TaskSortOption>(
                         value: filter,
-                        child: Text(optionText),
+                        child: Text(
+                          optionText,
+                          style: const TextStyle(fontSize: 13),
+                        ),
                       );
                     }).toList(),
                   ),
                 ],
               ),
+              const SizedBox(height: 10),
               Expanded(
                 child: StreamBuilder(
                   stream: taskProvider.taskStream,
@@ -167,49 +222,66 @@ class _TasksScreenState extends State<TasksScreen> {
                     if (snapshot.hasData) {
                       final tasks = snapshot.data;
 
-                      return ListView.builder(
-                        itemCount: tasks?.length,
-                        itemBuilder: (context, index) {
-                          final task = tasks![index];
-                          return Dismissible(
-                            key: Key(task.id),
-                            direction: DismissDirection.endToStart,
-                            background: Container(
-                              color: Colors.red,
-                              alignment: Alignment.centerRight,
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 10.0),
-                              child:
-                                  const Icon(Icons.delete, color: Colors.white),
-                            ),
-                            onDismissed: (direction) async {
-                              taskProvider.deleteTask(task.id);
-                              CustomSnackBar.showSuccess(
-                                  'Task Deleted Successfully');
-                            },
-                            child: TaskBlock(
-                              title: task.title,
-                              description: task.description,
-                              onDelete: () async {
-                                final confirmed = await CustomDialog
-                                    .showDeleteConfirmationDialog(context);
-                                if (confirmed != null && confirmed) {
-                                  taskProvider.deleteTask(task.id);
-                                  CustomSnackBar.showSuccess(
-                                      'Task Deleted Successfully');
-                                }
+                      return tasks!.isEmpty
+                          ? Center(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Image.asset(
+                                    Assets.nodata,
+                                    height: 80,
+                                  ),
+                                  const Text(
+                                    'No task available',
+                                    style: TextStyle(fontSize: 13),
+                                  ),
+                                ],
+                              ),
+                            )
+                          : ListView.builder(
+                              itemCount: tasks.length,
+                              itemBuilder: (context, index) {
+                                final task = tasks[index];
+                                return Dismissible(
+                                  key: Key(task.id),
+                                  direction: DismissDirection.endToStart,
+                                  background: Container(
+                                    color: Colors.red,
+                                    alignment: Alignment.centerRight,
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 10.0),
+                                    child: const Icon(Icons.delete,
+                                        color: Colors.white),
+                                  ),
+                                  onDismissed: (direction) async {
+                                    taskProvider.deleteTask(task.id);
+                                    CustomSnackBar.showSuccess(
+                                        'Task Deleted Successfully');
+                                  },
+                                  child: TaskBlock(
+                                    title: task.title,
+                                    description: task.description,
+                                    onDelete: () async {
+                                      final confirmed = await CustomDialog
+                                          .showDeleteConfirmationDialog(
+                                              context);
+                                      if (confirmed != null && confirmed) {
+                                        taskProvider.deleteTask(task.id);
+                                        CustomSnackBar.showSuccess(
+                                            'Task Deleted Successfully');
+                                      }
+                                    },
+                                    done: task.done,
+                                    onDone: () {
+                                      taskProvider.updateTaskStatus(
+                                          task.id, !task.done);
+                                    },
+                                    dueDate: task.dueDate,
+                                    createDate: task.createDate,
+                                  ),
+                                );
                               },
-                              done: task.done,
-                              onDone: () {
-                                taskProvider.updateTaskStatus(
-                                    task.id, !task.done);
-                              },
-                              dueDate: task.dueDate,
-                              createDate: task.createDate,
-                            ),
-                          );
-                        },
-                      );
+                            );
                     } else if (snapshot.hasError) {
                       return Text('Error: ${snapshot.error}');
                     } else if (!snapshot.hasData) {

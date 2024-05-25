@@ -36,7 +36,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => TaskProvider()),
       ],
       child: GetMaterialApp(
-        title: 'ToDo app',
+        title: 'Focus Fusion',
         theme: ThemeData(
             primarySwatch: Colors.blue,
             fontFamily: 'MyFont',

@@ -58,12 +58,12 @@ class TaskBlock extends StatelessWidget {
                     const SizedBox(height: 5),
                     Text(
                       'Create: ${DateFormat('dd-MM-yyyy').format(createDate.toDate()).toString()}',
-                      style: const TextStyle(fontSize: 16),
+                      style: const TextStyle(fontSize: 13),
                     ),
                     const SizedBox(height: 5),
                     Text(
                       'Due: ${DateFormat('dd-MM-yyyy').format(dueDate.toDate()).toString()}',
-                      style: const TextStyle(fontSize: 16),
+                      style: const TextStyle(fontSize: 13),
                     ),
                   ],
                 ),
@@ -80,6 +80,7 @@ class TaskBlock extends StatelessWidget {
                       onPressed: onDelete,
                       icon: const Icon(
                         Icons.delete,
+                        size: 20,
                         color: Colors.red,
                       )),
                 ],

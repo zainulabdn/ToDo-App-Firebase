@@ -3,6 +3,7 @@ import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/get_navigation.dart';
 import 'package:haztech_task/Core/Constants/colors.dart';
 import 'package:haztech_task/UI/Screens/Authentication/login_screen.dart';
+import 'package:haztech_task/UI/Screens/welcome/welcome_screen.dart';
 import 'package:haztech_task/UI/custom_widgets/custom_buttons.dart';
 import 'package:introduction_screen/introduction_screen.dart';
 
@@ -63,7 +64,7 @@ class _MyIntroductionScreenState extends State<MyIntroductionScreen> {
         skip: MyTextButton(
             name: 'Skip',
             onTap: () {
-              Get.off(() => const LoginScreen());
+              Get.off(() => const WelComeScreen());
             }),
         next: const Icon(Icons.arrow_forward, color: kPrimaryColor, size: 30),
         done: const Text('Continue',
@@ -72,7 +73,7 @@ class _MyIntroductionScreenState extends State<MyIntroductionScreen> {
                 color: kPrimaryColor,
                 fontWeight: FontWeight.bold)),
         onDone: () {
-          Get.off(() => const LoginScreen());
+          Get.off(() => const WelComeScreen());
         },
         dotsDecorator: DotsDecorator(
             size: const Size(10, 15),
