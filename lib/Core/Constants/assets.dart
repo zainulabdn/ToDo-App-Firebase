@@ -11,4 +11,8 @@ class Assets {
 
   static const String quotesCommas = 'assets/double-quotes.png';
   static const String nodata = 'assets/nodata.png';
+
+  /// icons
+  static const String editIcon = 'assets/edit.png';
+  static const String deleteIcon = 'assets/delete.png';
 }

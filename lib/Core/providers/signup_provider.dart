@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:haztech_task/UI/Screens/Authentication/choose_categories_view.dart';
 import 'package:haztech_task/UI/Screens/Task%20screeens/tasks_screen.dart';
 import 'package:ndialog/ndialog.dart';
 
@@ -35,7 +36,8 @@ class SignUpProvider extends ChangeNotifier {
       storeUserData(userId: user!.uid, name: name, email: email);
       CustomSnackBar.showSuccess('SignUp Successfully');
       dialog.dismiss();
-      Get.offAll(() => const TasksScreen());
+      // Get.offAll(() => const TasksScreen());
+      Get.offAll(const ChooseCategoryScreen());
     } catch (e) {
       CustomSnackBar.showError('SignUp Failed!');
       dialog.dismiss();

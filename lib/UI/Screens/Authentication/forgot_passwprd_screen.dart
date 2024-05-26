@@ -70,7 +70,9 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                   child: MyTextButton(
                       name: 'Back To Login',
                       onTap: () {
-                        Get.to(() => const LoginScreen());
+                        Get.to(() => LoginScreen(
+                              isAdmin: false,
+                            ));
                       }),
                 ),
                 const SizedBox(height: 15.0),

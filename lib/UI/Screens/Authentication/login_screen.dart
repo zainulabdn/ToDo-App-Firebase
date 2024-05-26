@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/get_navigation.dart';
+import 'package:haztech_task/Core/Constants/basehelper.dart';
 import 'package:haztech_task/Core/Constants/extension.dart';
 import 'package:haztech_task/UI/Screens/Authentication/forgot_passwprd_screen.dart';
 import 'package:haztech_task/UI/Screens/Authentication/signup_screen.dart';
@@ -13,7 +14,8 @@ import '../../../Core/Constants/colors.dart';
 import '../../../Core/providers/login_provider.dart';
 
 class LoginScreen extends StatefulWidget {
-  const LoginScreen({Key? key}) : super(key: key);
+  bool isAdmin;
+  LoginScreen({Key? key, required this.isAdmin}) : super(key: key);
 
   @override
   State<LoginScreen> createState() => _LoginScreenState();
@@ -54,11 +56,17 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                   ),
                   70.heightBox,
-                  const Text('Login',
-                      style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold)),
+                  widget.isAdmin
+                      ? const Text('Admin Login',
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold))
+                      : const Text('Login',
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold)),
                   20.heightBox,
                   CustomTextField(
                     prefixIcon: const Icon(
@@ -89,61 +97,68 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                     ),
                   ),
-                  Align(
-                    alignment: Alignment.centerRight,
-                    child: TextButton(
-                      onPressed: () {
-                        Get.to(() => const ForgotPasswordScreen());
-                      },
-                      child: const Text(
-                        'Recovery Password',
-                        style: TextStyle(color: kBlack),
-                      ),
-                    ),
-                  ),
+                  widget.isAdmin
+                      ? const SizedBox()
+                      : Align(
+                          alignment: Alignment.centerRight,
+                          child: TextButton(
+                            onPressed: () {
+                              Get.to(() => const ForgotPasswordScreen());
+                            },
+                            child: const Text(
+                              'Recovery Password',
+                              style: TextStyle(color: kBlack),
+                            ),
+                          ),
+                        ),
                   const SizedBox(height: 20.0),
                   MyButtonLong(
                       name: 'Sign In',
                       onTap: () {
                         if (emailController.text.isEmpty ||
                             passController.text.isEmpty) {
-                          return CustomSnackBar.showError(
+                          return BaseHelper.showErrorSnackBar(
                               'Please fill all the fields');
                         }
                         loginProvider.signInWithEmailAndPassword(
                             emailController.text, passController.text, context);
                       }),
                   const SizedBox(height: 20.0),
-                  const Row(
-                    children: [
-                      SizedBox(width: 20),
-                      Expanded(child: Divider(color: kBlack)),
-                      SizedBox(width: 20),
-                      Text('OR'),
-                      SizedBox(width: 20),
-                      Expanded(child: Divider(color: kBlack)),
-                      SizedBox(width: 20),
-                    ],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Text(
-                        "Not a Member?",
-                        style: TextStyle(
-                            fontSize: 15.0, color: kBlack.withOpacity(0.4)),
-                      ),
-                      TextButton(
-                          onPressed: () {
-                            Get.to(() => const SignUpScreen());
-                          },
-                          child: const Text(
-                            'Register Now',
-                            style: TextStyle(color: kBlack),
-                          ))
-                    ],
-                  ),
+                  widget.isAdmin
+                      ? const SizedBox()
+                      : const Row(
+                          children: [
+                            SizedBox(width: 20),
+                            Expanded(child: Divider(color: kBlack)),
+                            SizedBox(width: 20),
+                            Text('OR'),
+                            SizedBox(width: 20),
+                            Expanded(child: Divider(color: kBlack)),
+                            SizedBox(width: 20),
+                          ],
+                        ),
+                  widget.isAdmin
+                      ? const SizedBox()
+                      : Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Text(
+                              "Not a Member?",
+                              style: TextStyle(
+                                  fontSize: 15.0,
+                                  color: kBlack.withOpacity(0.4)),
+                            ),
+                            TextButton(
+                                onPressed: () {
+                                  Get.to(() => const SignUpScreen());
+                                },
+                                child: const Text(
+                                  'Register Now',
+                                  style: TextStyle(color: kBlack),
+                                ))
+                          ],
+                        ),
                   const SizedBox(height: 15.0),
                 ],
               ),

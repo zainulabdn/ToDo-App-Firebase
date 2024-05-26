@@ -6,6 +6,7 @@ import 'package:haztech_task/Core/Constants/colors.dart';
 import 'package:haztech_task/Core/enums/task_sorting.dart';
 import 'package:haztech_task/Core/notification_services.dart';
 import 'package:haztech_task/Core/providers/task_provider.dart';
+import 'package:haztech_task/UI/Screens/Authentication/choose_categories_view.dart';
 import 'package:haztech_task/UI/Screens/Task%20screeens/add_task_screen.dart';
 import 'package:haztech_task/UI/custom_widgets/custom_snackbars.dart';
 import 'package:haztech_task/UI/custom_widgets/task_block.dart';
@@ -28,6 +29,7 @@ class _TasksScreenState extends State<TasksScreen> {
   @override
   void initState() {
     super.initState();
+    TaskProvider().getUserName();
     notificationServices.requestNotificationPermission();
     notificationServices.getDeviceToken().then((value) {
       debugPrint('======Device token======');
@@ -70,13 +72,11 @@ class _TasksScreenState extends State<TasksScreen> {
               child: CircleAvatar(child: Icon(Icons.person))),
           title: Row(
             children: [
-              const Text(
-                'Hello ',
-                style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold),
-              ),
+              const Text('Hello ',
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold)),
               taskProvider.username == null
                   ? const CircularProgressIndicator()
                   : Text(
@@ -108,25 +108,15 @@ class _TasksScreenState extends State<TasksScreen> {
                 child: Column(
                   children: [
                     const SizedBox(height: 10),
-                    Image.asset(
-                      Assets.quotesCommas,
-                      height: 25,
-                      width: 25,
-                    ),
+                    Image.asset(Assets.quotesCommas, height: 25, width: 25),
                     const SizedBox(height: 10),
-                    Text(
-                      'You don\'t have to be great to start,',
-                      style: GoogleFonts.eduTasBeginner(fontSize: 18),
-                    ),
-                    Text(
-                      'but you have to start to be great',
-                      style: GoogleFonts.eduTasBeginner(fontSize: 18),
-                    ),
+                    Text('You don\'t have to be great to start,',
+                        style: GoogleFonts.eduTasBeginner(fontSize: 18)),
+                    Text('but you have to start to be great',
+                        style: GoogleFonts.eduTasBeginner(fontSize: 18)),
                     const SizedBox(height: 10),
-                    Text(
-                      '- Zig Ziglar',
-                      style: GoogleFonts.nanumMyeongjo(fontSize: 12),
-                    ),
+                    Text('- Zig Ziglar',
+                        style: GoogleFonts.nanumMyeongjo(fontSize: 12)),
                     const SizedBox(height: 15),
                   ],
                 ),
@@ -299,8 +289,9 @@ class _TasksScreenState extends State<TasksScreen> {
         ),
         floatingActionButton: FloatingActionButton(
             onPressed: () {
-              Get.to(() => const AddTaskScreen(),
-                  transition: Transition.leftToRight);
+              // Get.to(() => const AddTaskScreen(),
+              //     transition: Transition.leftToRight);
+              Get.to(ChooseCategoryScreen());
             },
             child: const Icon(Icons.add)),
       );

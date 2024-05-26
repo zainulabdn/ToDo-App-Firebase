@@ -7,6 +7,7 @@ import '../../Core/Constants/colors.dart';
 class CustomTextField extends StatelessWidget {
   final TextEditingController controller;
   final bool obscure;
+  final int maxline;
   final bool readOnly;
   final String? errorText;
   final String hintText;
@@ -26,6 +27,7 @@ class CustomTextField extends StatelessWidget {
       required this.controller,
       this.onTap,
       this.disableBorder = false,
+      this.maxline = 1,
       this.label,
       this.obscure = false,
       this.enabled = true,
@@ -49,7 +51,8 @@ class CustomTextField extends StatelessWidget {
         borderRadius: BorderRadius.circular(15), // Set the border radius
       ),
       child: Center(
-        child: TextField(
+        child: TextFormField(
+          maxLines: maxline,
           readOnly: readOnly,
           controller: controller,
           obscureText: obscure,

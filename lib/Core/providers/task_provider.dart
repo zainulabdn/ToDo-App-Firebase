@@ -1,8 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:haztech_task/Core/Constants/basehelper.dart';
 import 'package:haztech_task/Core/enums/task_sorting.dart';
 import 'package:haztech_task/UI/Screens/Authentication/login_screen.dart';
+import 'package:haztech_task/UI/Screens/welcome/welcome_screen.dart';
 import 'package:haztech_task/UI/custom_widgets/custom_snackbars.dart';
 import 'package:ndialog/ndialog.dart';
 import 'package:get/get.dart';
@@ -54,9 +56,9 @@ class TaskProvider extends ChangeNotifier {
 
       dialog.dismiss();
       Get.back();
-      CustomSnackBar.showSuccess('Task Added Successfully');
+      BaseHelper.showSnackBar('Task Added Successfully');
     } catch (e) {
-      CustomSnackBar.showError('Error adding task: $e');
+      BaseHelper.showErrorSnackBar('Error adding task: $e');
       dialog.dismiss();
       rethrow;
     }
@@ -141,8 +143,10 @@ class TaskProvider extends ChangeNotifier {
   void logout() async {
     try {
       await _auth.signOut();
-      CustomSnackBar.showSuccess('Logout successfully');
-      Get.offAll(() => const LoginScreen());
+      BaseHelper.showSnackBar('Logout successfully');
+      Get.offAll(() => const WelComeScreen(
+          // isAdmin: false,
+          ));
     } catch (e) {
       debugPrint('Error signing out: $e');
       rethrow;
@@ -150,6 +154,7 @@ class TaskProvider extends ChangeNotifier {
   }
 
   void fetchTasks() {
+    getUserName();
     Query query = _firestore.collection('tasks');
     debugPrint('>>>>>>>>>>>>>>>>>>');
     final currentUserUid = FirebaseAuth.instance.currentUser?.uid;

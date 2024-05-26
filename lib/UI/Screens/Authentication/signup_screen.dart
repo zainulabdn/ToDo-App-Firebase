@@ -35,35 +35,30 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 children: [
                   const SizedBox(height: 30),
                   const Center(
-                    child: Text(
-                      'Registration',
-                      style: TextStyle(
-                          fontSize: 30,
-                          fontWeight: FontWeight.w700,
-                          color: kBlack),
-                    ),
+                    child: Text('Registration',
+                        style: TextStyle(
+                            fontSize: 30,
+                            fontWeight: FontWeight.w700,
+                            color: kBlack)),
                   ),
                   const SizedBox(height: 5.0),
                   const Center(
                     child: Padding(
                       padding: EdgeInsets.symmetric(horizontal: 40.0),
-                      child: Text(
-                        'Please register yourself\n to continue',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(fontSize: 17, color: kBlack),
-                      ),
+                      child: Text('Please register yourself\n to continue',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(fontSize: 17, color: kBlack)),
                     ),
                   ),
                   const SizedBox(height: 70),
                   CustomTextField(
-                    prefixIcon: const Icon(
-                      Icons.person,
-                      size: 20,
-                      color: kPrimaryColor,
-                    ),
-                    controller: nameController,
-                    hintText: 'Name',
-                  ),
+                      prefixIcon: const Icon(
+                        Icons.person,
+                        size: 20,
+                        color: kPrimaryColor,
+                      ),
+                      controller: nameController,
+                      hintText: 'Name'),
                   const SizedBox(height: 15),
                   CustomTextField(
                     prefixIcon: const Icon(
@@ -149,7 +144,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       ),
                       TextButton(
                           onPressed: () {
-                            Get.to(() => const LoginScreen());
+                            Get.to(() => LoginScreen(isAdmin: false));
                           },
                           child: const Text(
                             'Login Now',

@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
+import 'package:haztech_task/Core/Constants/basehelper.dart';
 import 'package:haztech_task/UI/Screens/Task%20screeens/tasks_screen.dart';
 import 'package:haztech_task/UI/custom_widgets/custom_snackbars.dart';
+import 'package:haztech_task/admin/screens/admin_home_screen.dart';
 import 'package:ndialog/ndialog.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginProvider extends ChangeNotifier {
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -22,17 +25,25 @@ class LoginProvider extends ChangeNotifier {
         title: const Text('Loading'), message: const Text('Please wait'));
     try {
       dialog.show();
-      await _auth.signInWithEmailAndPassword(
+      UserCredential userCredential = await _auth.signInWithEmailAndPassword(
         email: email,
         password: password,
       );
-      CustomSnackBar.showSuccess('Login successfully');
+      // Save user's UUID in SharedPreferences
+      await saveUserUUID(userCredential.user!.uid);
+      BaseHelper.showSnackBar('Login Successfully');
       dialog.dismiss();
-      Get.offAll(() => const TasksScreen());
+      if (email == 'admin@admin.com' && password == '12345678') {
+        Get.offAll(() => const AdminHomeScreen());
+      } else {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => TasksScreen()),
+        );
+      }
     } catch (e) {
-      CustomSnackBar.showError('Error signing in: $e');
+      BaseHelper.showErrorSnackBar('Invalid Credentials');
       dialog.dismiss();
-
       rethrow;
     }
   }
@@ -51,5 +62,10 @@ class LoginProvider extends ChangeNotifier {
       dialog.dismiss();
       rethrow;
     }
+  }
+
+  Future<void> saveUserUUID(String uuid) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString('user_uuid', uuid);
   }
 }
