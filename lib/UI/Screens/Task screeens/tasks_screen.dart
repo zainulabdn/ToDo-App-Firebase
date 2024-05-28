@@ -289,9 +289,9 @@ class _TasksScreenState extends State<TasksScreen> {
         ),
         floatingActionButton: FloatingActionButton(
             onPressed: () {
-              // Get.to(() => const AddTaskScreen(),
-              //     transition: Transition.leftToRight);
-              Get.to(ChooseCategoryScreen());
+              Get.to(() => const AddTaskScreen(),
+                  transition: Transition.leftToRight);
+              // Get.to(ChooseCategoryScreen());
             },
             child: const Icon(Icons.add)),
       );
