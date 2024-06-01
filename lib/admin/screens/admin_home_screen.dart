@@ -26,6 +26,8 @@ class AdminHomeScreen extends StatelessWidget {
                 onPressed: () {
                   Get.bottomSheet(
                     SettingsBottomSheet(
+                      isstatistics: false,
+                      onStatistics: () {},
                       username: taskProvider.username.toString(),
                       onUsernameChanged: (value) {
                         taskProvider.updateUsername(value);

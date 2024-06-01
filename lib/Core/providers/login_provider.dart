@@ -36,10 +36,11 @@ class LoginProvider extends ChangeNotifier {
       if (email == 'admin@admin.com' && password == '12345678') {
         Get.offAll(() => const AdminHomeScreen());
       } else {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => TasksScreen()),
-        );
+        Get.offAll(() => const TasksScreen());
+        // Navigator.push(
+        //   context,
+        //   MaterialPageRoute(builder: (context) => TasksScreen()),
+        // );
       }
     } catch (e) {
       BaseHelper.showErrorSnackBar('Invalid Credentials');

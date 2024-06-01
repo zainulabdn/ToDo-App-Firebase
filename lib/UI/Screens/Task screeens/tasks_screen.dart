@@ -2,13 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:haztech_task/Core/Constants/assets.dart';
+import 'package:haztech_task/Core/Constants/basehelper.dart';
 import 'package:haztech_task/Core/Constants/colors.dart';
+import 'package:haztech_task/Core/Models/task_model.dart';
 import 'package:haztech_task/Core/enums/task_sorting.dart';
 import 'package:haztech_task/Core/notification_services.dart';
 import 'package:haztech_task/Core/providers/task_provider.dart';
-import 'package:haztech_task/UI/Screens/Authentication/choose_categories_view.dart';
 import 'package:haztech_task/UI/Screens/Task%20screeens/add_task_screen.dart';
-import 'package:haztech_task/UI/custom_widgets/custom_snackbars.dart';
+import 'package:haztech_task/UI/Screens/feedback/feedback_view.dart';
+import 'package:haztech_task/UI/Screens/graph/graph_screen.dart';
+import 'package:haztech_task/UI/Screens/history/history_view.dart';
 import 'package:haztech_task/UI/custom_widgets/task_block.dart';
 import 'package:provider/provider.dart';
 
@@ -29,7 +32,8 @@ class _TasksScreenState extends State<TasksScreen> {
   @override
   void initState() {
     super.initState();
-    TaskProvider().getUserName();
+    final taskProvider = Provider.of<TaskProvider>(context, listen: false);
+    taskProvider.getUserName();
     notificationServices.requestNotificationPermission();
     notificationServices.getDeviceToken().then((value) {
       debugPrint('======Device token======');
@@ -40,6 +44,7 @@ class _TasksScreenState extends State<TasksScreen> {
   @override
   Widget build(BuildContext context) {
     return Consumer<TaskProvider>(builder: (context, taskProvider, child) {
+      print("---------------->${taskProvider.username}");
       return Scaffold(
         appBar: AppBar(
           centerTitle: false,
@@ -48,18 +53,17 @@ class _TasksScreenState extends State<TasksScreen> {
             IconButton(
                 onPressed: () {
                   Get.bottomSheet(
-                    SettingsBottomSheet(
-                      username: taskProvider.username.toString(),
-                      onUsernameChanged: (value) {
-                        taskProvider.updateUsername(value);
+                    OtherSettingsBottomSheet(
+                      onFeedback: () {
+                        Get.to(FeedbackScreen());
                       },
-                      onUpdatePressed: () {
-                        taskProvider.updateUserData();
-                        Get.back();
+                      onHistory: () {
+                        Get.to(HistoryView());
                       },
-                      onLogoutPressed: () {
-                        taskProvider.logout();
-                        Get.back();
+                      onStatistics: () {
+                        Get.to(TaskStatisticsScreen(
+                          uid: taskProvider.user!.uid,
+                        ));
                       },
                     ),
                     backgroundColor: Colors.white,
@@ -67,26 +71,80 @@ class _TasksScreenState extends State<TasksScreen> {
                 },
                 icon: const Icon(Icons.settings, color: Colors.black)),
           ],
-          leading: const Padding(
-              padding: EdgeInsets.all(8.0),
-              child: CircleAvatar(child: Icon(Icons.person))),
-          title: Row(
-            children: [
-              const Text('Hello ',
-                  style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold)),
-              taskProvider.username == null
-                  ? const CircularProgressIndicator()
-                  : Text(
-                      taskProvider.username.toString(),
-                      style: const TextStyle(
-                        color: kPrimaryColor,
-                        fontSize: 17,
+          leading: InkWell(
+            onTap: () {
+              Get.bottomSheet(
+                SettingsBottomSheet(
+                  isstatistics: false,
+                  onStatistics: () {
+                    Get.to(TaskStatisticsScreen(
+                      uid: taskProvider.user!.uid,
+                    ));
+                  },
+                  username: taskProvider.username ?? '',
+                  onUsernameChanged: (value) {
+                    taskProvider.updateUsername(value);
+                  },
+                  onUpdatePressed: () {
+                    taskProvider.updateUserData();
+                    Get.back();
+                  },
+                  onLogoutPressed: () {
+                    taskProvider.logout();
+                    Get.back();
+                  },
+                ),
+                backgroundColor: Colors.white,
+              );
+            },
+            child: const Padding(
+                padding: EdgeInsets.all(8.0),
+                child: CircleAvatar(child: Icon(Icons.person))),
+          ),
+          title: InkWell(
+            onTap: () {
+              Get.bottomSheet(
+                SettingsBottomSheet(
+                  isstatistics: false,
+                  onStatistics: () {
+                    Get.to(TaskStatisticsScreen(
+                      uid: taskProvider.user!.uid,
+                    ));
+                  },
+                  username: taskProvider.username ?? '',
+                  onUsernameChanged: (value) {
+                    taskProvider.updateUsername(value);
+                  },
+                  onUpdatePressed: () {
+                    taskProvider.updateUserData();
+                    Get.back();
+                  },
+                  onLogoutPressed: () {
+                    taskProvider.logout();
+                    Get.back();
+                  },
+                ),
+                backgroundColor: Colors.white,
+              );
+            },
+            child: Row(
+              children: [
+                const Text('Hello ',
+                    style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold)),
+                taskProvider.username == null
+                    ? const CircularProgressIndicator()
+                    : Text(
+                        taskProvider.username.toString(),
+                        style: const TextStyle(
+                          color: kPrimaryColor,
+                          fontSize: 17,
+                        ),
                       ),
-                    ),
-            ],
+              ],
+            ),
           ),
         ),
         body: Padding(
@@ -206,7 +264,7 @@ class _TasksScreenState extends State<TasksScreen> {
               ),
               const SizedBox(height: 10),
               Expanded(
-                child: StreamBuilder(
+                child: StreamBuilder<List<Task>>(
                   stream: taskProvider.taskStream,
                   builder: (context, snapshot) {
                     if (snapshot.hasData) {
@@ -245,7 +303,7 @@ class _TasksScreenState extends State<TasksScreen> {
                                   ),
                                   onDismissed: (direction) async {
                                     taskProvider.deleteTask(task.id);
-                                    CustomSnackBar.showSuccess(
+                                    BaseHelper.showSnackBar(
                                         'Task Deleted Successfully');
                                   },
                                   child: TaskBlock(
@@ -257,7 +315,7 @@ class _TasksScreenState extends State<TasksScreen> {
                                               context);
                                       if (confirmed != null && confirmed) {
                                         taskProvider.deleteTask(task.id);
-                                        CustomSnackBar.showSuccess(
+                                        BaseHelper.showSnackBar(
                                             'Task Deleted Successfully');
                                       }
                                     },
@@ -265,6 +323,11 @@ class _TasksScreenState extends State<TasksScreen> {
                                     onDone: () {
                                       taskProvider.updateTaskStatus(
                                           task.id, !task.done);
+                                    },
+                                    latedone: task.lateDone,
+                                    onLateDone: () {
+                                      taskProvider.updateLateTaskStatus(
+                                          task.id, !task.lateDone);
                                     },
                                     dueDate: task.dueDate,
                                     createDate: task.createDate,

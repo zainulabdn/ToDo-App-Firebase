@@ -72,17 +72,32 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                     color: kPrimaryColor,
                   ),
                   controller: TextEditingController(
-                      text: taskProvider.selectedDueDate != null
-                          ? DateFormat('yyyy-MM-dd')
-                              .format(taskProvider.selectedDueDate!)
-                          : 'Due Date'),
-                  hintText: 'Due Date',
+                      text: taskProvider.selectedStartDate != null
+                          ? DateFormat('yyyy-MM-dd HH:mm')
+                              .format(taskProvider.selectedStartDate!)
+                          : 'Start Date'),
+                  hintText: 'Start Date',
                   onTap: () {
-                    taskProvider.selectDate(context);
+                    taskProvider.selectStartDate(context);
                   },
                 ),
                 const SizedBox(height: 10.0),
-                const SizedBox(height: 10.0),
+                CustomTextField(
+                  readOnly: true,
+                  prefixIcon: const Icon(
+                    Icons.calendar_today,
+                    color: kPrimaryColor,
+                  ),
+                  controller: TextEditingController(
+                      text: taskProvider.selectedEndDate != null
+                          ? DateFormat('yyyy-MM-dd HH:mm')
+                              .format(taskProvider.selectedEndDate!)
+                          : 'End Date'),
+                  hintText: 'End Date',
+                  onTap: () {
+                    taskProvider.selectEndDate(context);
+                  },
+                ),
                 const SizedBox(height: 40.0),
                 MyButtonLong(
                     name: 'Add Task',

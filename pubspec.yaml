@@ -49,6 +49,9 @@ dependencies:
   introduction_screen: ^3.1.8
   lottie: ^3.1.2
   google_fonts: ^5.1.0
+  syncfusion_flutter_charts: ^25.2.6
+  # charts_flutter:
+  # flutter_charts: ^0.5.2
 
 dev_dependencies:
   flutter_test:
