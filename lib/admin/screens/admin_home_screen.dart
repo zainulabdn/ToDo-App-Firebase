@@ -7,6 +7,7 @@ import 'package:haztech_task/UI/Screens/categories/add_quotes_screen.dart';
 import 'package:haztech_task/UI/custom_widgets/custom_buttons.dart';
 import 'package:haztech_task/UI/custom_widgets/setting_bottom_sheet.dart';
 import 'package:haztech_task/admin/allUsers/all_users_list.dart';
+import 'package:haztech_task/admin/feedback/user_feedback_view.dart';
 import 'package:provider/provider.dart';
 
 import '../../UI/Screens/categories/categories_screen.dart';
@@ -95,7 +96,11 @@ class AdminHomeScreen extends StatelessWidget {
                         transition: Transition.leftToRight);
                   }),
               10.heightBox,
-              MyButtonLong(name: 'Check User Feedbacks', onTap: () {}),
+              MyButtonLong(
+                  name: 'Check User Feedbacks',
+                  onTap: () {
+                    Get.to(UserFeedBackList());
+                  }),
               10.heightBox,
               MyButtonLong(
                   name: 'All Users List',

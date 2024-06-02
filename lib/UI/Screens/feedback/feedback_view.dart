@@ -1,14 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
+import 'package:haztech_task/Core/Constants/basehelper.dart';
 import 'package:haztech_task/Core/Constants/colors.dart';
+import 'package:haztech_task/UI/custom_widgets/custom_buttons.dart';
 import 'package:haztech_task/UI/custom_widgets/custom_textfield.dart';
 
 class FeedbackScreen extends StatelessWidget {
   FeedbackScreen({super.key});
-  TextEditingController titleController = TextEditingController();
-  TextEditingController emailController = TextEditingController();
+  final TextEditingController titleController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController descriptionController = TextEditingController();
+  final FirebaseAuth _auth = FirebaseAuth.instance;
 
-  TextEditingController descriptionController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -27,7 +32,7 @@ class FeedbackScreen extends StatelessWidget {
         ),
       ),
       body: Padding(
-        padding: const EdgeInsets.all(8.0),
+        padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
             CustomTextField(
@@ -57,9 +62,50 @@ class FeedbackScreen extends StatelessWidget {
               controller: descriptionController,
               hintText: 'Description...',
             ),
+            const SizedBox(height: 15),
+            MyButtonLong(
+                name: 'Submit',
+                onTap: () {
+                  if (emailController.text.isEmpty ||
+                      titleController.text.isEmpty ||
+                      descriptionController.text.isEmpty) {
+                    return BaseHelper.showErrorSnackBar(
+                        'Please fill all the fields');
+                  }
+                  saveFeedback(
+                    titleController.text,
+                    emailController.text,
+                    descriptionController.text,
+                  );
+                  BaseHelper.showSnackBar('Submitted');
+                  emailController.clear();
+                  titleController.clear();
+                  descriptionController.clear();
+                }),
           ],
         ),
       ),
     );
+  }
+
+  void saveFeedback(String title, String email, String description) async {
+    User? user = _auth.currentUser;
+    if (user == null) {
+      BaseHelper.showErrorSnackBar('User not logged in');
+      return;
+    }
+
+    String uid = user.uid;
+    FirebaseFirestore.instance.collection('feedback').add({
+      'uid': uid,
+      'title': title,
+      'email': email,
+      'description': description,
+      'timestamp': FieldValue.serverTimestamp(),
+    }).then((_) {
+      BaseHelper.showSnackBar('Feedback submitted successfully');
+    }).catchError((error) {
+      BaseHelper.showErrorSnackBar('Error submitting feedback: $error');
+    });
   }
 }

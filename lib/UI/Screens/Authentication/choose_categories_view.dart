@@ -5,6 +5,7 @@ import 'package:haztech_task/Core/Constants/colors.dart';
 import 'package:haztech_task/Core/Constants/extension.dart';
 import 'package:haztech_task/UI/Screens/Task%20screeens/tasks_screen.dart';
 import 'package:haztech_task/UI/custom_widgets/custom_buttons.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Category {
   final String name;
@@ -14,10 +15,20 @@ class Category {
     required this.name,
     this.isSelected = false,
   });
+
+  Map<String, dynamic> toJson() => {
+        'name': name,
+        'isSelected': isSelected,
+      };
+
+  static Category fromJson(Map<String, dynamic> json) => Category(
+        name: json['name'],
+        isSelected: json['isSelected'],
+      );
 }
 
 class ChooseCategoryScreen extends StatelessWidget {
-  const ChooseCategoryScreen({Key? key});
+  const ChooseCategoryScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -55,7 +66,10 @@ class ChooseCategoryScreen extends StatelessWidget {
             const Spacer(),
             MyButtonLong(
                 name: 'Next',
-                onTap: () {
+                onTap: () async {
+                  await (context as Element)
+                      .findAncestorStateOfType<_CategoryListState>()
+                      ?.saveSelectedCategories();
                   Get.offAll(const TasksScreen());
                 }),
           ],
@@ -75,67 +89,93 @@ class _CategoryListState extends State<CategoryList> {
   List<bool> isSelectedList = [];
 
   @override
-  Widget build(BuildContext context) {
-    return StreamBuilder<QuerySnapshot>(
-      stream: FirebaseFirestore.instance.collection('categories').snapshots(),
-      builder: (context, snapshot) {
-        if (!snapshot.hasData) {
-          return const Center(child: CircularProgressIndicator());
-        }
+  void initState() {
+    super.initState();
+    fetchCategories();
+  }
 
-        List categoryNames = snapshot.data!.docs.map((doc) {
-          return doc['name'];
-        }).toList();
+  Future<void> fetchCategories() async {
+    final prefs = await SharedPreferences.getInstance();
+    final selectedCategories = prefs.getStringList('selectedCategories') ?? [];
 
-        // Update the local categories list with categories from Firebase
+    FirebaseFirestore.instance.collection('categories').get().then((snapshot) {
+      List categoryNames = snapshot.docs.map((doc) {
+        return doc['name'];
+      }).toList();
+
+      setState(() {
         categories = categoryNames.map((name) {
-          return Category(name: name);
+          return Category(
+            name: name,
+            isSelected: selectedCategories.contains(name),
+          );
         }).toList();
 
-        // Initialize isSelectedList if it's empty
-        if (isSelectedList.isEmpty) {
-          isSelectedList = List.filled(categories.length, false);
-        }
+        isSelectedList = categories.map((category) {
+          return category.isSelected;
+        }).toList();
+      });
+    });
+  }
 
-        return GridView.builder(
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2, childAspectRatio: 2.5),
-          itemCount: categories.length,
-          itemBuilder: (context, index) {
-            return InkWell(
-              onTap: () {
-                setState(() {
-                  isSelectedList[index] = !isSelectedList[index];
-                });
-              },
-              child: Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 5),
-                width: Get.width,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20),
-                  color: isSelectedList[index] ? kPrimaryColor : Colors.white,
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey.withOpacity(0.3),
-                      spreadRadius: 2,
-                      blurRadius: 3,
-                      offset: const Offset(0, 2), // changes position of shadow
-                    ),
-                  ],
+  @override
+  Widget build(BuildContext context) {
+    return categories.isEmpty
+        ? const Center(child: CircularProgressIndicator())
+        : GridView.builder(
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2, childAspectRatio: 2.5),
+            itemCount: categories.length,
+            itemBuilder: (context, index) {
+              return InkWell(
+                onTap: () {
+                  setState(() {
+                    categories[index].isSelected =
+                        !categories[index].isSelected;
+                  });
+                  saveSelectedCategories();
+                },
+                child: Container(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                  margin:
+                      const EdgeInsets.symmetric(vertical: 5, horizontal: 5),
+                  width: Get.width,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20),
+                    color: categories[index].isSelected
+                        ? kPrimaryColor
+                        : Colors.white,
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(0.3),
+                        spreadRadius: 2,
+                        blurRadius: 3,
+                        offset:
+                            const Offset(0, 2), // changes position of shadow
+                      ),
+                    ],
+                  ),
+                  child: Center(
+                      child: Text(
+                    categories[index].name,
+                    style: TextStyle(
+                        color: categories[index].isSelected
+                            ? kWhite
+                            : Colors.black),
+                  )),
                 ),
-                child: Center(
-                    child: Text(
-                  categories[index].name,
-                  style: TextStyle(
-                      color: isSelectedList[index] ? kWhite : Colors.black),
-                )),
-              ),
-            );
-          },
-        );
-      },
-    );
+              );
+            },
+          );
+  }
+
+  Future<void> saveSelectedCategories() async {
+    final prefs = await SharedPreferences.getInstance();
+    final selectedCategories = categories
+        .where((category) => category.isSelected)
+        .map((category) => category.name)
+        .toList();
+    await prefs.setStringList('selectedCategories', selectedCategories);
   }
 }

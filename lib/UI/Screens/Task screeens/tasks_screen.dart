@@ -4,11 +4,13 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:haztech_task/Core/Constants/assets.dart';
 import 'package:haztech_task/Core/Constants/basehelper.dart';
 import 'package:haztech_task/Core/Constants/colors.dart';
+import 'package:haztech_task/Core/Models/quote_model.dart';
 import 'package:haztech_task/Core/Models/task_model.dart';
 import 'package:haztech_task/Core/enums/task_sorting.dart';
 import 'package:haztech_task/Core/notification_services.dart';
 import 'package:haztech_task/Core/providers/task_provider.dart';
 import 'package:haztech_task/UI/Screens/Task%20screeens/add_task_screen.dart';
+import 'package:haztech_task/UI/Screens/Task%20screeens/quote_screen.dart';
 import 'package:haztech_task/UI/Screens/feedback/feedback_view.dart';
 import 'package:haztech_task/UI/Screens/graph/graph_screen.dart';
 import 'package:haztech_task/UI/Screens/history/history_view.dart';
@@ -58,7 +60,7 @@ class _TasksScreenState extends State<TasksScreen> {
                         Get.to(FeedbackScreen());
                       },
                       onHistory: () {
-                        Get.to(HistoryView());
+                        Get.to(const HistoryView());
                       },
                       onStatistics: () {
                         Get.to(TaskStatisticsScreen(
@@ -159,26 +161,38 @@ class _TasksScreenState extends State<TasksScreen> {
                     color: kPrimaryColor, fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 10),
+              // Container(
+              //   width: Get.width,
+              //   decoration: BoxDecoration(
+              //       borderRadius: BorderRadius.circular(20), color: kWhite),
+              //   child: Column(
+              //     children: [
+              //       const SizedBox(height: 10),
+              //       Image.asset(Assets.quotesCommas, height: 25, width: 25),
+              //       const SizedBox(height: 10),
+              //       Text('You don\'t have to be great to start,',
+              //           style: GoogleFonts.eduTasBeginner(fontSize: 18)),
+              //       Text('but you have to start to be great',
+              //           style: GoogleFonts.eduTasBeginner(fontSize: 18)),
+              //       const SizedBox(height: 10),
+              //       Text('- Zig Ziglar',
+              //           style: GoogleFonts.nanumMyeongjo(fontSize: 12)),
+              //       const SizedBox(height: 15),
+              //     ],
+              //   ),
+              // ),
+              // const SizedBox(height: 20),
               Container(
-                width: Get.width,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20), color: kWhite),
-                child: Column(
-                  children: [
-                    const SizedBox(height: 10),
-                    Image.asset(Assets.quotesCommas, height: 25, width: 25),
-                    const SizedBox(height: 10),
-                    Text('You don\'t have to be great to start,',
-                        style: GoogleFonts.eduTasBeginner(fontSize: 18)),
-                    Text('but you have to start to be great',
-                        style: GoogleFonts.eduTasBeginner(fontSize: 18)),
-                    const SizedBox(height: 10),
-                    Text('- Zig Ziglar',
-                        style: GoogleFonts.nanumMyeongjo(fontSize: 12)),
-                    const SizedBox(height: 15),
-                  ],
-                ),
-              ),
+                  width: Get.width,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20), color: kWhite),
+                  child: Column(
+                    children: [
+                      const SizedBox(height: 10),
+                      Image.asset(Assets.quotesCommas, height: 25, width: 25),
+                      QuotesView(),
+                    ],
+                  )),
               const SizedBox(height: 20),
               const Text('ToDos:',
                   style: TextStyle(
@@ -336,7 +350,7 @@ class _TasksScreenState extends State<TasksScreen> {
                               },
                             );
                     } else if (snapshot.hasError) {
-                      return Text('Error: ${snapshot.error}');
+                      return const Text('no data found');
                     } else if (!snapshot.hasData) {
                       return const Center(
                           child: Text('no data found',
