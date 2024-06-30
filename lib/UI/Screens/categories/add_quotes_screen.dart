@@ -1,7 +1,8 @@
-import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get_core/get_core.dart';
 import 'package:get/get_navigation/get_navigation.dart';
+
 import 'package:haztech_task/Core/Constants/assets.dart';
 import 'package:haztech_task/Core/Constants/basehelper.dart';
 import 'package:haztech_task/Core/Constants/colors.dart';
@@ -10,6 +11,11 @@ import 'package:haztech_task/UI/custom_widgets/custom_buttons.dart';
 import 'package:haztech_task/UI/custom_widgets/custom_textfield.dart';
 
 class AddQuoteScreen extends StatefulWidget {
+  bool isUser;
+  AddQuoteScreen({
+    Key? key,
+    this.isUser = false,
+  }) : super(key: key);
   @override
   _AddQuoteScreenState createState() => _AddQuoteScreenState();
 }
@@ -129,195 +135,212 @@ class _AddQuoteScreenState extends State<AddQuoteScreen> {
               onTap: () => _addQuote(context),
             ),
             40.heightBox,
-            const Text(
-              'Quotes List',
-              style: TextStyle(color: kPrimaryColor, fontSize: 18),
-            ),
+            widget.isUser == false
+                ? const Text(
+                    'Quotes List',
+                    style: TextStyle(color: kPrimaryColor, fontSize: 18),
+                  )
+                : const SizedBox(),
             10.heightBox,
-            Expanded(
-              child: StreamBuilder<QuerySnapshot>(
-                stream:
-                    FirebaseFirestore.instance.collection('quotes').snapshots(),
-                builder: (context, snapshot) {
-                  if (snapshot.hasError) {
-                    return Text('Error: ${snapshot.error}');
-                  }
+            widget.isUser == false
+                ? Expanded(
+                    child: StreamBuilder<QuerySnapshot>(
+                      stream: FirebaseFirestore.instance
+                          .collection('quotes')
+                          .snapshots(),
+                      builder: (context, snapshot) {
+                        if (snapshot.hasError) {
+                          return Text('Error: ${snapshot.error}');
+                        }
 
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const Center(child: CircularProgressIndicator());
-                  }
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return const Center(
+                              child: CircularProgressIndicator());
+                        }
 
-                  if (snapshot.hasData) {
-                    final quotes = snapshot.data!.docs;
-                    return ListView.builder(
-                      itemCount: quotes.length,
-                      itemBuilder: (context, index) {
-                        final quote = quotes[index];
-                        // return ListTile(
-                        //   title: Text(quote['text']),
-                        //   subtitle: Text('Category: ${quote['category']}'),
-                        //   trailing: SizedBox(
-                        //     width: 100,
-                        //     child: Row(
-                        //       mainAxisAlignment: MainAxisAlignment.end,
-                        //       children: [
-                        //         IconButton(
-                        //           onPressed: () async {
-                        //             await FirebaseFirestore.instance
-                        //                 .collection('quotes')
-                        //                 .doc(quote.id)
-                        //                 .delete();
-                        //             BaseHelper.showSnackBar(
-                        //                 'Quote deleted successfully');
-                        //           },
-                        //           icon: Image.asset(
-                        //             Assets.deleteIcon,
-                        //             height: 20,
-                        //             width: 20,
-                        //           ),
-                        //         ),
-                        //         IconButton(
-                        //           onPressed: () {
-                        //             _quoteController.text = quote['text'];
-                        //             setState(() {
-                        //               _selectedCategory = quote['category'];
-                        //             });
-                        //           },
-                        //           icon: Image.asset(
-                        //             Assets.editIcon,
-                        //             height: 18,
-                        //             width: 18,
-                        //           ),
-                        //         ),
-                        //       ],
-                        //     ),
-                        //   ),
-                        //   // Additional customization for each quote tile
-                        // );
-                        return Container(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 20, vertical: 5),
-                          margin: const EdgeInsets.symmetric(vertical: 5),
-                          width: Get.width,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            color: Colors.white,
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.grey.withOpacity(0.3),
-                                spreadRadius: 2,
-                                blurRadius: 3,
-                                offset: const Offset(
-                                    0, 2), // changes position of shadow
-                              ),
-                            ],
-                          ),
-                          child: Column(
-                            children: [
-                              Row(
-                                children: [
-                                  Text('Category: ${quote['category']}'),
-                                  const Spacer(),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.end,
-                                    children: [
-                                      IconButton(
-                                        onPressed: () async {
-                                          await FirebaseFirestore.instance
-                                              .collection('quotes')
-                                              .doc(quote.id)
-                                              .delete();
-                                          BaseHelper.showSnackBar(
-                                              'Quote deleted successfully');
-                                        },
-                                        icon: Image.asset(
-                                          Assets.deleteIcon,
-                                          height: 20,
-                                          width: 20,
-                                        ),
-                                      ),
-                                      IconButton(
-                                        onPressed: () {
-                                          showDialog(
-                                            context: context,
-                                            builder: (BuildContext context) {
-                                              TextEditingController
-                                                  _quoteController =
-                                                  TextEditingController(
-                                                      text: quote['text']);
-                                              return AlertDialog(
-                                                title: const Text('Edit Quote'),
-                                                content: Column(
-                                                  mainAxisSize:
-                                                      MainAxisSize.min,
-                                                  children: [
-                                                    TextField(
-                                                      controller:
-                                                          _quoteController,
-                                                      decoration:
-                                                          const InputDecoration(
-                                                        hintText:
-                                                            'Enter edited quote text',
+                        if (snapshot.hasData) {
+                          final quotes = snapshot.data!.docs;
+                          return ListView.builder(
+                            itemCount: quotes.length,
+                            itemBuilder: (context, index) {
+                              final quote = quotes[index];
+                              // return ListTile(
+                              //   title: Text(quote['text']),
+                              //   subtitle: Text('Category: ${quote['category']}'),
+                              //   trailing: SizedBox(
+                              //     width: 100,
+                              //     child: Row(
+                              //       mainAxisAlignment: MainAxisAlignment.end,
+                              //       children: [
+                              //         IconButton(
+                              //           onPressed: () async {
+                              //             await FirebaseFirestore.instance
+                              //                 .collection('quotes')
+                              //                 .doc(quote.id)
+                              //                 .delete();
+                              //             BaseHelper.showSnackBar(
+                              //                 'Quote deleted successfully');
+                              //           },
+                              //           icon: Image.asset(
+                              //             Assets.deleteIcon,
+                              //             height: 20,
+                              //             width: 20,
+                              //           ),
+                              //         ),
+                              //         IconButton(
+                              //           onPressed: () {
+                              //             _quoteController.text = quote['text'];
+                              //             setState(() {
+                              //               _selectedCategory = quote['category'];
+                              //             });
+                              //           },
+                              //           icon: Image.asset(
+                              //             Assets.editIcon,
+                              //             height: 18,
+                              //             width: 18,
+                              //           ),
+                              //         ),
+                              //       ],
+                              //     ),
+                              //   ),
+                              //   // Additional customization for each quote tile
+                              // );
+                              return Container(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 20, vertical: 5),
+                                margin: const EdgeInsets.symmetric(vertical: 5),
+                                width: Get.width,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10),
+                                  color: Colors.white,
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.grey.withOpacity(0.3),
+                                      spreadRadius: 2,
+                                      blurRadius: 3,
+                                      offset: const Offset(
+                                          0, 2), // changes position of shadow
+                                    ),
+                                  ],
+                                ),
+                                child: Column(
+                                  children: [
+                                    Row(
+                                      children: [
+                                        Text('Category: ${quote['category']}'),
+                                        const Spacer(),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.end,
+                                          children: [
+                                            IconButton(
+                                              onPressed: () async {
+                                                await FirebaseFirestore.instance
+                                                    .collection('quotes')
+                                                    .doc(quote.id)
+                                                    .delete();
+                                                BaseHelper.showSnackBar(
+                                                    'Quote deleted successfully');
+                                              },
+                                              icon: Image.asset(
+                                                Assets.deleteIcon,
+                                                height: 20,
+                                                width: 20,
+                                              ),
+                                            ),
+                                            IconButton(
+                                              onPressed: () {
+                                                showDialog(
+                                                  context: context,
+                                                  builder:
+                                                      (BuildContext context) {
+                                                    TextEditingController
+                                                        _quoteController =
+                                                        TextEditingController(
+                                                            text:
+                                                                quote['text']);
+                                                    return AlertDialog(
+                                                      title: const Text(
+                                                          'Edit Quote'),
+                                                      content: Column(
+                                                        mainAxisSize:
+                                                            MainAxisSize.min,
+                                                        children: [
+                                                          TextField(
+                                                            controller:
+                                                                _quoteController,
+                                                            decoration:
+                                                                const InputDecoration(
+                                                              hintText:
+                                                                  'Enter edited quote text',
+                                                            ),
+                                                          ),
+                                                        ],
                                                       ),
-                                                    ),
-                                                  ],
-                                                ),
-                                                actions: [
-                                                  TextButton(
-                                                    onPressed: () {
-                                                      Navigator.of(context)
-                                                          .pop();
-                                                    },
-                                                    child: const Text('Cancel'),
-                                                  ),
-                                                  TextButton(
-                                                    onPressed: () async {
-                                                      // Update the quote in Firestore
-                                                      await FirebaseFirestore
-                                                          .instance
-                                                          .collection('quotes')
-                                                          .doc(quote.id)
-                                                          .update({
-                                                        'text': _quoteController
-                                                            .text
-                                                            .trim(),
-                                                      });
-                                                      BaseHelper.showSnackBar(
-                                                          'Quote edited successfully');
-                                                      Navigator.of(context)
-                                                          .pop();
-                                                    },
-                                                    child: const Text('Save'),
-                                                  ),
-                                                ],
-                                              );
-                                            },
-                                          );
-                                        },
-                                        icon: Image.asset(
-                                          Assets.editIcon,
-                                          height: 18,
-                                          width: 18,
+                                                      actions: [
+                                                        TextButton(
+                                                          onPressed: () {
+                                                            Navigator.of(
+                                                                    context)
+                                                                .pop();
+                                                          },
+                                                          child: const Text(
+                                                              'Cancel'),
+                                                        ),
+                                                        TextButton(
+                                                          onPressed: () async {
+                                                            // Update the quote in Firestore
+                                                            await FirebaseFirestore
+                                                                .instance
+                                                                .collection(
+                                                                    'quotes')
+                                                                .doc(quote.id)
+                                                                .update({
+                                                              'text':
+                                                                  _quoteController
+                                                                      .text
+                                                                      .trim(),
+                                                            });
+                                                            BaseHelper.showSnackBar(
+                                                                'Quote edited successfully');
+                                                            Navigator.of(
+                                                                    context)
+                                                                .pop();
+                                                          },
+                                                          child: const Text(
+                                                              'Save'),
+                                                        ),
+                                                      ],
+                                                    );
+                                                  },
+                                                );
+                                              },
+                                              icon: Image.asset(
+                                                Assets.editIcon,
+                                                height: 18,
+                                                width: 18,
+                                              ),
+                                            ),
+                                          ],
                                         ),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                              20.heightBox,
-                              Text(quote['text']),
-                              20.heightBox
-                            ],
-                          ),
-                        );
-                      },
-                    );
-                  }
+                                      ],
+                                    ),
+                                    20.heightBox,
+                                    Text(quote['text']),
+                                    20.heightBox
+                                  ],
+                                ),
+                              );
+                            },
+                          );
+                        }
 
-                  return const Text('No quotes found.');
-                },
-              ),
-            ),
+                        return const Text('No quotes found.');
+                      },
+                    ),
+                  )
+                : const SizedBox(),
           ],
         ),
       ),

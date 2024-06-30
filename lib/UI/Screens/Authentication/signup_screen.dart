@@ -21,6 +21,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passController = TextEditingController();
   TextEditingController conPassController = TextEditingController();
+  TextEditingController ageController = TextEditingController();
+  String? selectedGender;
 
   @override
   Widget build(BuildContext context) {
@@ -60,22 +62,59 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       controller: nameController,
                       hintText: 'Name'),
                   const SizedBox(height: 15),
-                  CustomTextField(
-                    prefixIcon: const Icon(
-                      Icons.alternate_email,
-                      color: kPrimaryColor,
-                      size: 20,
+                  DropdownButtonFormField<String>(
+                    decoration: InputDecoration(
+                      fillColor: Colors.white,
+                      filled: true,
+                      prefixIcon: const Icon(
+                        Icons.person_outline,
+                        color: kPrimaryColor,
+                      ),
+                      hintText: 'Select Gender',
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(15.0),
+                        borderSide: const BorderSide(color: Colors.white),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(15.0),
+                        borderSide: const BorderSide(color: Colors.white),
+                      ),
                     ),
-                    controller: emailController,
-                    hintText: 'Email',
+                    value: selectedGender,
+                    items: ['Male', 'Female']
+                        .map((gender) => DropdownMenuItem(
+                              value: gender,
+                              child: Text(gender),
+                            ))
+                        .toList(),
+                    onChanged: (value) {
+                      setState(() {
+                        selectedGender = value;
+                      });
+                    },
                   ),
                   const SizedBox(height: 15),
                   CustomTextField(
-                    prefixIcon: const Icon(
-                      Icons.lock_open,
-                      size: 20,
-                      color: kPrimaryColor,
-                    ),
+                      prefixIcon: const Icon(
+                        Icons.cake,
+                        size: 20,
+                        color: kPrimaryColor,
+                      ),
+                      controller: ageController,
+                      hintText: 'Age'),
+                  const SizedBox(height: 15),
+                  CustomTextField(
+                      prefixIcon: const Icon(
+                        Icons.alternate_email,
+                        color: kPrimaryColor,
+                        size: 20,
+                      ),
+                      controller: emailController,
+                      hintText: 'Email'),
+                  const SizedBox(height: 15),
+                  CustomTextField(
+                    prefixIcon: const Icon(Icons.lock_open,
+                        size: 20, color: kPrimaryColor),
                     controller: passController,
                     obscure: !signupProvider.isPasswordVisible,
                     hintText: 'Password',
@@ -121,7 +160,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       onTap: () {
                         if (emailController.text.isEmpty ||
                             nameController.text.isEmpty ||
-                            passController.text.isEmpty) {
+                            passController.text.isEmpty ||
+                            selectedGender == null ||
+                            ageController.text.isEmpty) {
                           return CustomSnackBar.showError(
                               'Please fill all the fields');
                         } else {
@@ -129,6 +170,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               nameController.text,
                               emailController.text,
                               passController.text,
+                              selectedGender.toString(),
+                              ageController.text,
                               context);
                         }
                       }),
@@ -138,7 +181,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Text(
-                        "Already Register?",
+                        "Already Registered?",
                         style: TextStyle(
                             fontSize: 15.0, color: kBlack.withOpacity(0.4)),
                       ),

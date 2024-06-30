@@ -9,7 +9,9 @@ import '../../../Core/Constants/colors.dart';
 import '../../../Core/providers/login_provider.dart';
 
 class ForgotPasswordScreen extends StatefulWidget {
-  const ForgotPasswordScreen({Key? key}) : super(key: key);
+  bool isChangePassword;
+  ForgotPasswordScreen({Key? key, this.isChangePassword = false})
+      : super(key: key);
 
   @override
   State<ForgotPasswordScreen> createState() => _ForgotPasswordScreenState();
@@ -29,9 +31,11 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const SizedBox(height: 30),
-                const Center(
+                Center(
                   child: Text(
-                    'Forgot Password!',
+                    widget.isChangePassword == true
+                        ? 'Change Password'
+                        : 'Forgot Password!',
                     style: TextStyle(
                         fontSize: 30,
                         fontWeight: FontWeight.w700,
@@ -66,15 +70,17 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                           emailController.text, context);
                     }),
                 const SizedBox(height: 30.0),
-                Center(
-                  child: MyTextButton(
-                      name: 'Back To Login',
-                      onTap: () {
-                        Get.to(() => LoginScreen(
-                              isAdmin: false,
-                            ));
-                      }),
-                ),
+                widget.isChangePassword == false
+                    ? Center(
+                        child: MyTextButton(
+                            name: 'Back To Login',
+                            onTap: () {
+                              Get.to(() => LoginScreen(
+                                    isAdmin: false,
+                                  ));
+                            }),
+                      )
+                    : SizedBox(),
                 const SizedBox(height: 15.0),
               ],
             ),

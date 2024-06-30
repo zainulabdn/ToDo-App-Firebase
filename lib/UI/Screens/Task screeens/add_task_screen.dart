@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:haztech_task/Core/Constants/colors.dart';
 import 'package:haztech_task/Core/providers/task_provider.dart';
+import 'package:haztech_task/UI/Screens/Authentication/choose_categories_view.dart';
 import 'package:haztech_task/UI/custom_widgets/custom_buttons.dart';
 import 'package:haztech_task/UI/custom_widgets/custom_snackbars.dart';
 import 'package:haztech_task/UI/custom_widgets/custom_textfield.dart';
@@ -18,7 +19,7 @@ class AddTaskScreen extends StatefulWidget {
 class _AddTaskScreenState extends State<AddTaskScreen> {
   TextEditingController titleController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
-
+  Category? selectedCategory;
   @override
   Widget build(BuildContext context) {
     return Consumer<TaskProvider>(builder: (context, taskProvider, child) {
@@ -64,6 +65,22 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                   controller: descriptionController,
                   hintText: 'Description...',
                 ),
+                // const SizedBox(height: 10.0),
+                // DropdownButton<Category>(
+                //   value: selectedCategory,
+                //   onChanged: (Category? newValue) {
+                //     setState(() {
+                //       selectedCategory = newValue!;
+                //     });
+                //   },
+                //   items: taskProvider.categories
+                //       .map<DropdownMenuItem<Category>>((Category category) {
+                //     return DropdownMenuItem<Category>(
+                //       value: category,
+                //       child: Text(category.name),
+                //     );
+                //   }).toList(),
+                // ),
                 const SizedBox(height: 10.0),
                 CustomTextField(
                   readOnly: true,

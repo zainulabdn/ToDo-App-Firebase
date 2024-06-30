@@ -21,7 +21,7 @@ class CustomTextField extends StatelessWidget {
   final onTap;
   final bool disableBorder;
   final onChanged;
-
+  final TextInputType? keyboardType;
   const CustomTextField(
       {Key? key,
       required this.controller,
@@ -39,6 +39,7 @@ class CustomTextField extends StatelessWidget {
       this.suffixIcon,
       @required this.prefixIcon,
       this.onChanged,
+      this.keyboardType,
       this.readOnly = false})
       : super(key: key);
 
@@ -56,6 +57,7 @@ class CustomTextField extends StatelessWidget {
           readOnly: readOnly,
           controller: controller,
           obscureText: obscure,
+          keyboardType: keyboardType,
           decoration: InputDecoration(
             prefixIcon: prefixIcon,
 

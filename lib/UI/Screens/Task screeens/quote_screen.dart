@@ -3,7 +3,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:haztech_task/Core/Constants/assets.dart';
 import 'package:haztech_task/Core/Constants/basehelper.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:haztech_task/Core/Constants/colors.dart';

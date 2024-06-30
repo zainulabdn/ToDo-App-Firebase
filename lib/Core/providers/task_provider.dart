@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart' as Storage;
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:haztech_task/Core/Constants/basehelper.dart';
@@ -17,9 +20,13 @@ class TaskProvider extends ChangeNotifier {
   User? user;
 
   String? username;
+  String? agE;
+  String? gendeR;
+  String? profilPicturE;
   late Stream<List<Task>> _taskStream;
   TaskFilter currentFilter = TaskFilter.all;
   TaskSortOption currentOption = TaskSortOption.none;
+  final Storage.FirebaseStorage _storage = Storage.FirebaseStorage.instance;
 
   Stream<List<Task>> get taskStream => _taskStream;
   DateTime? selectedDueDate;
@@ -173,8 +180,15 @@ class TaskProvider extends ChangeNotifier {
         if (snapshot.exists) {
           final data = snapshot.data() as Map<String, dynamic>;
           final name = data['name'];
+          final age = data['age'];
+          final gender = data['gender'];
+          final profilePicture = data['profilePicture'];
           debugPrint('Username: $name');
+          debugPrint('age: $age');
           username = name;
+          agE = age;
+          gendeR = gender;
+          profilPicturE = profilePicture;
           notifyListeners();
         }
       }
@@ -186,6 +200,25 @@ class TaskProvider extends ChangeNotifier {
 
   void updateUsername(String newUsername) {
     username = newUsername;
+
+    notifyListeners();
+  }
+
+  void updateAge(String age) {
+    agE = age;
+
+    notifyListeners();
+  }
+
+  void updateGender(String gender) {
+    gendeR = gender;
+
+    notifyListeners();
+  }
+
+  void updateProfilePhoto(String profile) {
+    profilPicturE = profile;
+
     notifyListeners();
   }
 
@@ -193,12 +226,40 @@ class TaskProvider extends ChangeNotifier {
     final userCollection = FirebaseFirestore.instance.collection('users');
     final userDoc = userCollection.doc(user?.uid);
 
-    userDoc.update({'name': username}).then((_) {
+    userDoc.update({
+      'name': username,
+      'age': agE,
+      'gender': gendeR,
+      'profilePicture': profilPicturE
+    }).then((_) {
       CustomSnackBar.showSuccess('Profile Update Successfully');
       notifyListeners();
     }).catchError((error) {
       CustomSnackBar.showError('Error updating user data: $error');
     });
+  }
+
+  Future<void> uploadProfilePicture(File imageFile) async {
+    try {
+      final userId = user?.uid;
+      if (userId == null) return;
+
+      final storageRef = _storage.ref().child('profile_pictures/$userId.jpg');
+      await storageRef.putFile(imageFile);
+
+      final downloadUrl = await storageRef.getDownloadURL();
+      profilPicturE = downloadUrl;
+
+      await _firestore.collection('users').doc(userId).update({
+        'profilePicture': downloadUrl,
+      });
+
+      CustomSnackBar.showSuccess('Profile picture updated successfully');
+      notifyListeners();
+    } catch (e) {
+      CustomSnackBar.showError('Error uploading profile picture: $e');
+      debugPrint('Error uploading profile picture: $e');
+    }
   }
 
   void logout() async {

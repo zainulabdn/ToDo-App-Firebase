@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:haztech_task/Core/Constants/assets.dart';
 import 'package:haztech_task/Core/Constants/basehelper.dart';
 import 'package:haztech_task/Core/Constants/colors.dart';
-import 'package:haztech_task/Core/Models/quote_model.dart';
 import 'package:haztech_task/Core/Models/task_model.dart';
 import 'package:haztech_task/Core/enums/task_sorting.dart';
 import 'package:haztech_task/Core/notification_services.dart';
 import 'package:haztech_task/Core/providers/task_provider.dart';
+import 'package:haztech_task/UI/Screens/Authentication/choose_categories_view.dart';
+import 'package:haztech_task/UI/Screens/Authentication/forgot_passwprd_screen.dart';
 import 'package:haztech_task/UI/Screens/Task%20screeens/add_task_screen.dart';
 import 'package:haztech_task/UI/Screens/Task%20screeens/quote_screen.dart';
+import 'package:haztech_task/UI/Screens/categories/add_quotes_screen.dart';
 import 'package:haztech_task/UI/Screens/feedback/feedback_view.dart';
 import 'package:haztech_task/UI/Screens/graph/graph_screen.dart';
 import 'package:haztech_task/UI/Screens/history/history_view.dart';
@@ -77,6 +78,21 @@ class _TasksScreenState extends State<TasksScreen> {
             onTap: () {
               Get.bottomSheet(
                 SettingsBottomSheet(
+                  onUpdateChangeCategories: () {
+                    Get.to(() => ChooseCategoryScreen());
+                  },
+                  age: taskProvider.agE ?? '',
+                  gender: taskProvider.gendeR ?? '',
+                  profilePicture: taskProvider.profilPicturE ?? '',
+                  onProfilePictureUpdate: (value) async {
+                    await taskProvider.uploadProfilePicture(value);
+                    // taskProvider.updateProfilePhoto(value);
+                  },
+                  onUpdateChangePassword: () {
+                    Get.to(() => ForgotPasswordScreen(
+                          isChangePassword: true,
+                        ));
+                  },
                   isstatistics: false,
                   onStatistics: () {
                     Get.to(TaskStatisticsScreen(
@@ -87,6 +103,8 @@ class _TasksScreenState extends State<TasksScreen> {
                   onUsernameChanged: (value) {
                     taskProvider.updateUsername(value);
                   },
+                  onAgeChanged: (value) {},
+                  onGenderChanged: (value) {},
                   onUpdatePressed: () {
                     taskProvider.updateUserData();
                     Get.back();
@@ -99,14 +117,38 @@ class _TasksScreenState extends State<TasksScreen> {
                 backgroundColor: Colors.white,
               );
             },
-            child: const Padding(
-                padding: EdgeInsets.all(8.0),
-                child: CircleAvatar(child: Icon(Icons.person))),
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: CircleAvatar(
+                radius: 40,
+                backgroundColor:
+                    Colors.grey, // Optional: Set a background color
+                backgroundImage: taskProvider.profilPicturE == ''
+                    ? null // No background image if no profile picture
+                    : NetworkImage(taskProvider.profilPicturE!),
+                child: taskProvider.profilPicturE == ''
+                    ? const Icon(Icons.person,
+                        size: 80) // Placeholder icon if no profile picture
+                    : null, // No child widget if there is a background image
+              ),
+            ),
           ),
           title: InkWell(
             onTap: () {
               Get.bottomSheet(
+                isScrollControlled: true,
                 SettingsBottomSheet(
+                  onUpdateChangeCategories: () {
+                    Get.to(() => ChooseCategoryScreen());
+                  },
+                  onUpdateChangePassword: () {
+                    Get.to(() => ForgotPasswordScreen(
+                          isChangePassword: true,
+                        ));
+                  },
+                  onProfilePictureUpdate: (value) async {
+                    await taskProvider.uploadProfilePicture(value);
+                  },
                   isstatistics: false,
                   onStatistics: () {
                     Get.to(TaskStatisticsScreen(
@@ -114,11 +156,21 @@ class _TasksScreenState extends State<TasksScreen> {
                     ));
                   },
                   username: taskProvider.username ?? '',
+                  age: taskProvider.agE ?? '',
+                  gender: taskProvider.gendeR ?? '',
+                  profilePicture: taskProvider.profilPicturE ?? '',
                   onUsernameChanged: (value) {
                     taskProvider.updateUsername(value);
                   },
+                  onAgeChanged: (value) {
+                    taskProvider.updateAge(value);
+                  },
+                  onGenderChanged: (value) {
+                    taskProvider.updateGender(value);
+                  },
                   onUpdatePressed: () {
                     taskProvider.updateUserData();
+
                     Get.back();
                   },
                   onLogoutPressed: () {
@@ -155,12 +207,25 @@ class _TasksScreenState extends State<TasksScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const SizedBox(height: 10),
-              const Text(
-                'Quote Of The Day:',
-                style: TextStyle(
-                    color: kPrimaryColor, fontWeight: FontWeight.bold),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text('Quote Of The Day:',
+                      style: TextStyle(
+                          color: kPrimaryColor, fontWeight: FontWeight.bold)),
+                  IconButton(
+                      onPressed: () {
+                        Get.to(AddQuoteScreen(
+                          isUser: true,
+                        ));
+                      },
+                      icon: const Icon(
+                        Icons.add_circle,
+                        color: kPrimaryColor,
+                      ))
+                ],
               ),
-              const SizedBox(height: 10),
+              const SizedBox(height: 5),
               // Container(
               //   width: Get.width,
               //   decoration: BoxDecoration(

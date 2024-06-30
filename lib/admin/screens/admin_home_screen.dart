@@ -3,6 +3,8 @@ import 'package:get/get.dart';
 import 'package:haztech_task/Core/Constants/colors.dart';
 import 'package:haztech_task/Core/Constants/extension.dart';
 import 'package:haztech_task/Core/providers/task_provider.dart';
+import 'package:haztech_task/UI/Screens/Authentication/choose_categories_view.dart';
+import 'package:haztech_task/UI/Screens/Authentication/forgot_passwprd_screen.dart';
 import 'package:haztech_task/UI/Screens/categories/add_quotes_screen.dart';
 import 'package:haztech_task/UI/custom_widgets/custom_buttons.dart';
 import 'package:haztech_task/UI/custom_widgets/setting_bottom_sheet.dart';
@@ -27,11 +29,32 @@ class AdminHomeScreen extends StatelessWidget {
                 onPressed: () {
                   Get.bottomSheet(
                     SettingsBottomSheet(
+                      onUpdateChangeCategories: () {
+                        Get.to(() => ChooseCategoryScreen());
+                      },
+                      onUpdateChangePassword: () {
+                        Get.to(() => ForgotPasswordScreen(
+                              isChangePassword: true,
+                            ));
+                      },
+                      profilePicture: taskProvider.profilPicturE ?? '',
+                      onProfilePictureUpdate: (value) async {
+                        // taskProvider.updateProfilePhoto(value);
+                        await taskProvider.uploadProfilePicture(value);
+                      },
+                      age: taskProvider.agE ?? '',
+                      gender: taskProvider.gendeR ?? '',
                       isstatistics: false,
                       onStatistics: () {},
                       username: taskProvider.username.toString(),
                       onUsernameChanged: (value) {
                         taskProvider.updateUsername(value);
+                      },
+                      onAgeChanged: (value) {
+                        taskProvider.updateAge(value);
+                      },
+                      onGenderChanged: (value) {
+                        taskProvider.updateGender(value);
                       },
                       onUpdatePressed: () {
                         taskProvider.updateUserData();
@@ -99,7 +122,7 @@ class AdminHomeScreen extends StatelessWidget {
               MyButtonLong(
                   name: 'Check User Feedbacks',
                   onTap: () {
-                    Get.to(UserFeedBackList());
+                    Get.to(const UserFeedBackList());
                   }),
               10.heightBox,
               MyButtonLong(
