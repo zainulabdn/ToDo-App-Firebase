@@ -19,7 +19,9 @@ class TaskProvider extends ChangeNotifier {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   User? user;
 
-  String? username;
+  String? fnamE;
+  String? lnamE;
+
   String? agE;
   String? gendeR;
   String? profilPicturE;
@@ -39,7 +41,9 @@ class TaskProvider extends ChangeNotifier {
         getUserName();
         fetchTasks();
       } else {
-        username = null;
+        fnamE = null;
+        lnamE = null;
+
         _taskStream = const Stream.empty();
         notifyListeners();
       }
@@ -179,13 +183,17 @@ class TaskProvider extends ChangeNotifier {
             await _firestore.collection('users').doc(user.uid).get();
         if (snapshot.exists) {
           final data = snapshot.data() as Map<String, dynamic>;
-          final name = data['name'];
+          final fnamee = data['firstname'];
+          final lnamee = data['lastname'];
+
           final age = data['age'];
           final gender = data['gender'];
           final profilePicture = data['profilePicture'];
-          debugPrint('Username: $name');
+          debugPrint('Username: $fnamE');
           debugPrint('age: $age');
-          username = name;
+          fnamE = fnamee;
+
+          lnamE = lnamee;
           agE = age;
           gendeR = gender;
           profilPicturE = profilePicture;
@@ -198,8 +206,14 @@ class TaskProvider extends ChangeNotifier {
     }
   }
 
-  void updateUsername(String newUsername) {
-    username = newUsername;
+  void updatefname(String fname) {
+    fnamE = fname;
+
+    notifyListeners();
+  }
+
+  void updatelname(String lname) {
+    lnamE = lname;
 
     notifyListeners();
   }
@@ -227,7 +241,8 @@ class TaskProvider extends ChangeNotifier {
     final userDoc = userCollection.doc(user?.uid);
 
     userDoc.update({
-      'name': username,
+      'firstname': fnamE,
+      'lastname': lnamE,
       'age': agE,
       'gender': gendeR,
       'profilePicture': profilPicturE
@@ -266,7 +281,9 @@ class TaskProvider extends ChangeNotifier {
     try {
       await _auth.signOut();
       // Clear the provider state
-      username = null;
+      fnamE = null;
+      lnamE = null;
+
       selectedDueDate = null;
       _taskStream = const Stream.empty();
       notifyListeners();

@@ -50,16 +50,14 @@ class _TaskStatisticsScreenState extends State<TaskStatisticsScreen> {
             child: const Icon(Icons.arrow_back, color: kBlack)),
         backgroundColor: Colors.transparent,
         title: const Text(
-          'Task Statistics',
-          style: TextStyle(color: kBlack),
+          'Task Statistics & Achievements',
+          style: TextStyle(color: kBlack, fontSize: 17),
         ),
       ),
       body: tasks != null
           ? SingleChildScrollView(
               child: Column(
-                children: [
-                  buildTaskChart(),
-                ],
+                children: [buildTaskChart(), buildTaskAwardedChart()],
               ),
             )
           : const Center(child: CircularProgressIndicator()),
@@ -108,7 +106,7 @@ class _TaskStatisticsScreenState extends State<TaskStatisticsScreen> {
           primaryXAxis: const CategoryAxis(),
 
           // Initialize numeric axis with integer interval
-          primaryYAxis: NumericAxis(
+          primaryYAxis: const NumericAxis(
             interval:
                 1, // Set the interval to 1 to ensure only integer values are displayed
             labelFormat: '{value}', // Format to display values as integers
@@ -118,7 +116,49 @@ class _TaskStatisticsScreenState extends State<TaskStatisticsScreen> {
           series: series,
 
           // Add legend
-          legend: Legend(isVisible: true),
+          legend: const Legend(isVisible: true),
+        ),
+      ),
+    );
+  }
+
+  Widget buildTaskAwardedChart() {
+    // Calculate task statistics
+    List<TaskStatistic> taskStatistics = calculateTaskStatistics(tasks!);
+
+    // Create a chart series
+    List<CartesianSeries<TaskStatistic, String>> series = [
+      ColumnSeries<TaskStatistic, String>(
+        // Bind data source
+        dataSource: taskStatistics,
+        xValueMapper: (TaskStatistic stat, _) => stat.period,
+        yValueMapper: (TaskStatistic stat, _) => stat.doneCount,
+        name: 'Achievements',
+        color: Colors.green, // Color for Done tasks
+      ),
+    ];
+
+    // Build and return the chart widget
+    return Center(
+      child: Container(
+        height: 300,
+        padding: const EdgeInsets.all(16.0),
+        child: SfCartesianChart(
+          // Initialize category axis
+          primaryXAxis: const CategoryAxis(),
+
+          // Initialize numeric axis with integer interval
+          primaryYAxis: const NumericAxis(
+            interval:
+                1, // Set the interval to 1 to ensure only integer values are displayed
+            labelFormat: '{value}', // Format to display values as integers
+          ),
+
+          // Add series to the chart
+          series: series,
+
+          // Add legend
+          legend: const Legend(isVisible: true),
         ),
       ),
     );

@@ -4,6 +4,8 @@ import 'package:get/get.dart';
 import 'package:haztech_task/Core/Constants/colors.dart';
 
 class UserListScreen extends StatelessWidget {
+  const UserListScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -75,7 +77,12 @@ class UserListScreen extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(userData['name']),
+                          Row(
+                            children: [
+                              Text(userData['firstname'] ?? ''),
+                              Text(userData['lastname'] ?? ''),
+                            ],
+                          ),
                           Text(userData['email'])
                         ],
                       ),

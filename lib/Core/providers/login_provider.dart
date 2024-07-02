@@ -37,10 +37,6 @@ class LoginProvider extends ChangeNotifier {
         Get.offAll(() => const AdminHomeScreen());
       } else {
         Get.offAll(() => const TasksScreen());
-        // Navigator.push(
-        //   context,
-        //   MaterialPageRoute(builder: (context) => TasksScreen()),
-        // );
       }
     } catch (e) {
       BaseHelper.showErrorSnackBar('Invalid Credentials');

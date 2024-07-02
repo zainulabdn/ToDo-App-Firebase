@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:haztech_task/UI/Screens/Authentication/choose_categories_view.dart';
 import 'package:ndialog/ndialog.dart';
-
 import '../../UI/custom_widgets/custom_snackbars.dart';
 
 class SignUpProvider extends ChangeNotifier {
@@ -20,8 +19,14 @@ class SignUpProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> signUpWithEmailAndPassword(String name, String email,
-      String password, String gender, String age, BuildContext context) async {
+  Future<void> signUpWithEmailAndPassword(
+      String fname,
+      String lname,
+      String email,
+      String password,
+      String gender,
+      String age,
+      BuildContext context) async {
     ProgressDialog dialog = ProgressDialog(context,
         title: const Text('Loading'), message: const Text('Please wait'));
     try {
@@ -34,7 +39,8 @@ class SignUpProvider extends ChangeNotifier {
       User? user = userCredential.user;
       storeUserData(
           userId: user!.uid,
-          name: name,
+          fname: fname,
+          lname: lname,
           email: email,
           gender: gender,
           age: age,
@@ -54,7 +60,8 @@ class SignUpProvider extends ChangeNotifier {
 
   Future<void> storeUserData(
       {required String userId,
-      required String name,
+      required String fname,
+      required String lname,
       required String email,
       required String gender,
       required String age,
@@ -64,7 +71,8 @@ class SignUpProvider extends ChangeNotifier {
         'profilePicture': profile,
         'email': email,
         'uid': userId,
-        'name': name,
+        'firstname': fname,
+        'lastname': lname,
         'gender': gender,
         'age': age,
       });

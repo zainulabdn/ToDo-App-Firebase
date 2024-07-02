@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class BaseHelper {
+  /// Snack Bar Message on Success
   static showSnackBar(msg, {color, button}) {
     Get.showSnackbar(GetSnackBar(
-      // message: msg,
       messageText: Text(
         msg,
         style: const TextStyle(
@@ -20,9 +20,9 @@ class BaseHelper {
     ));
   }
 
+  /// Error SnackBar
   static showErrorSnackBar(msg, {color, button}) {
     Get.showSnackbar(GetSnackBar(
-      // message: msg,
       messageText: Text(
         msg,
         style: const TextStyle(

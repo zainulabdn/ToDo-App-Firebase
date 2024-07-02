@@ -1,4 +1,5 @@
 class Assets {
+  /// Animations Lottie files json
   static const String splashAnimation =
       'assets/lottie-json/splash_animation.json';
   static const String getStarted = 'assets/lottie-json/getstarted.json';
@@ -9,10 +10,10 @@ class Assets {
   static const String getStarted5 =
       'assets/lottie-json/Animation - 1716624905234.json';
 
+  /// PNGS icons
   static const String quotesCommas = 'assets/double-quotes.png';
   static const String nodata = 'assets/nodata.png';
 
-  /// icons
   static const String editIcon = 'assets/edit.png';
   static const String deleteIcon = 'assets/delete.png';
 }

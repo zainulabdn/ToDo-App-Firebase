@@ -1,3 +1,2 @@
-
-const title = 'Flutter Todo app';
-const welcomeMsg = 'Welcome to HAZTASK';
+const title = 'FOCUS FUSION';
+const welcomeMsg = 'Welcome to FOCUS FUSION';

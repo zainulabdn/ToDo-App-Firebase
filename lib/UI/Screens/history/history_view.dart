@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:haztech_task/Core/Constants/colors.dart';
 import 'package:haztech_task/Core/Models/task_model.dart';
 import 'package:intl/intl.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class HistoryView extends StatefulWidget {
   const HistoryView({super.key});
@@ -14,15 +15,31 @@ class HistoryView extends StatefulWidget {
 
 class _HistoryViewState extends State<HistoryView> {
   List<Task>? tasks;
+  String? userId;
 
   @override
   void initState() {
     super.initState();
-    fetchTasks();
+    fetchUserId();
   }
 
-  void fetchTasks() {
-    FirebaseFirestore.instance.collection('tasks').get().then((querySnapshot) {
+  void fetchUserId() async {
+    // Fetch the current user ID
+    User? user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      setState(() {
+        userId = user.uid;
+      });
+      fetchTasks(user.uid);
+    }
+  }
+
+  void fetchTasks(String userId) {
+    FirebaseFirestore.instance
+        .collection('tasks')
+        .where('uid', isEqualTo: userId)
+        .get()
+        .then((querySnapshot) {
       setState(() {
         tasks =
             querySnapshot.docs.map((doc) => Task.fromSnapshot(doc)).toList();

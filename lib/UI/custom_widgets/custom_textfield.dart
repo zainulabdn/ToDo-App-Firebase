@@ -60,13 +60,10 @@ class CustomTextField extends StatelessWidget {
           keyboardType: keyboardType,
           decoration: InputDecoration(
             prefixIcon: prefixIcon,
-
             suffixIcon: suffixIcon,
             hintText: hintText,
             border: InputBorder.none,
-
-            contentPadding:
-                const EdgeInsets.all(16.0), // Add padding inside the text field
+            contentPadding: const EdgeInsets.all(16.0),
           ),
           onTap: onTap,
           onChanged: onChanged,

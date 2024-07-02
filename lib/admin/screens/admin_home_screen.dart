@@ -28,9 +28,12 @@ class AdminHomeScreen extends StatelessWidget {
             IconButton(
                 onPressed: () {
                   Get.bottomSheet(
-                    SettingsBottomSheet(
+                    AdminSettingsBottomSheet(
+                      onlUsernameChanged: (value) {
+                        taskProvider.updatelname(value);
+                      },
                       onUpdateChangeCategories: () {
-                        Get.to(() => ChooseCategoryScreen());
+                        Get.to(() => const ChooseCategoryScreen());
                       },
                       onUpdateChangePassword: () {
                         Get.to(() => ForgotPasswordScreen(
@@ -46,9 +49,10 @@ class AdminHomeScreen extends StatelessWidget {
                       gender: taskProvider.gendeR ?? '',
                       isstatistics: false,
                       onStatistics: () {},
-                      username: taskProvider.username.toString(),
+                      fname: taskProvider.fnamE ?? '',
+                      lname: taskProvider.lnamE ?? '',
                       onUsernameChanged: (value) {
-                        taskProvider.updateUsername(value);
+                        taskProvider.updatefname(value);
                       },
                       onAgeChanged: (value) {
                         taskProvider.updateAge(value);
@@ -66,9 +70,10 @@ class AdminHomeScreen extends StatelessWidget {
                       },
                     ),
                     backgroundColor: Colors.white,
+                    isScrollControlled: true,
                   );
                 },
-                icon: const Icon(Icons.settings, color: Colors.black)),
+                icon: const Icon(Icons.settings, color: Colors.black))
           ],
           leading: const Padding(
               padding: EdgeInsets.all(8.0),
@@ -82,10 +87,11 @@ class AdminHomeScreen extends StatelessWidget {
                     fontSize: 16,
                     fontWeight: FontWeight.bold),
               ),
-              taskProvider.username == null
+              taskProvider.fnamE == null
                   ? const CircularProgressIndicator()
                   : Text(
-                      taskProvider.username.toString(),
+                      taskProvider.fnamE.toString() +
+                          taskProvider.lnamE.toString(),
                       style: const TextStyle(
                         color: kPrimaryColor,
                         fontSize: 17,
@@ -128,7 +134,7 @@ class AdminHomeScreen extends StatelessWidget {
               MyButtonLong(
                   name: 'All Users List',
                   onTap: () {
-                    Get.to(UserListScreen());
+                    Get.to(const UserListScreen());
                   }),
               10.heightBox,
             ],

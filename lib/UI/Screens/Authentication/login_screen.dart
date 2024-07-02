@@ -97,20 +97,18 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                     ),
                   ),
-                  widget.isAdmin
-                      ? const SizedBox()
-                      : Align(
-                          alignment: Alignment.centerRight,
-                          child: TextButton(
-                            onPressed: () {
-                              Get.to(() => ForgotPasswordScreen());
-                            },
-                            child: const Text(
-                              'Recovery Password',
-                              style: TextStyle(color: kBlack),
-                            ),
-                          ),
-                        ),
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: TextButton(
+                      onPressed: () {
+                        Get.to(() => ForgotPasswordScreen());
+                      },
+                      child: const Text(
+                        'Recovery Password',
+                        style: TextStyle(color: kBlack),
+                      ),
+                    ),
+                  ),
                   const SizedBox(height: 20.0),
                   MyButtonLong(
                       name: 'Sign In',

@@ -19,7 +19,7 @@ import 'package:haztech_task/UI/custom_widgets/task_block.dart';
 import 'package:provider/provider.dart';
 
 import '../../../Core/enums/task_filter.dart';
-import '../../custom_widgets/delete_dialod.dart';
+import '../../custom_widgets/delete_dialog.dart';
 import '../../custom_widgets/setting_bottom_sheet.dart';
 
 class TasksScreen extends StatefulWidget {
@@ -47,7 +47,7 @@ class _TasksScreenState extends State<TasksScreen> {
   @override
   Widget build(BuildContext context) {
     return Consumer<TaskProvider>(builder: (context, taskProvider, child) {
-      print("---------------->${taskProvider.username}");
+      print("---------------->${taskProvider.fnamE}");
       return Scaffold(
         appBar: AppBar(
           centerTitle: false,
@@ -78,8 +78,13 @@ class _TasksScreenState extends State<TasksScreen> {
             onTap: () {
               Get.bottomSheet(
                 SettingsBottomSheet(
+                  onlUsernameChanged: (value) {
+                    taskProvider.updatelname(value);
+                  },
+                  fname: taskProvider.fnamE ?? '',
+                  lname: taskProvider.lnamE ?? '',
                   onUpdateChangeCategories: () {
-                    Get.to(() => ChooseCategoryScreen());
+                    Get.to(() => const ChooseCategoryScreen());
                   },
                   age: taskProvider.agE ?? '',
                   gender: taskProvider.gendeR ?? '',
@@ -99,9 +104,8 @@ class _TasksScreenState extends State<TasksScreen> {
                       uid: taskProvider.user!.uid,
                     ));
                   },
-                  username: taskProvider.username ?? '',
                   onUsernameChanged: (value) {
-                    taskProvider.updateUsername(value);
+                    taskProvider.updatefname(value);
                   },
                   onAgeChanged: (value) {},
                   onGenderChanged: (value) {},
@@ -115,21 +119,18 @@ class _TasksScreenState extends State<TasksScreen> {
                   },
                 ),
                 backgroundColor: Colors.white,
+                isScrollControlled: true,
               );
             },
             child: Padding(
               padding: const EdgeInsets.all(8.0),
               child: CircleAvatar(
                 radius: 40,
-                backgroundColor:
-                    Colors.grey, // Optional: Set a background color
-                backgroundImage: taskProvider.profilPicturE == ''
-                    ? null // No background image if no profile picture
-                    : NetworkImage(taskProvider.profilPicturE!),
-                child: taskProvider.profilPicturE == ''
-                    ? const Icon(Icons.person,
-                        size: 80) // Placeholder icon if no profile picture
-                    : null, // No child widget if there is a background image
+                backgroundColor: Colors.grey,
+                backgroundImage: taskProvider.profilPicturE != null &&
+                        taskProvider.profilPicturE!.isNotEmpty
+                    ? Image.network(taskProvider.profilPicturE!).image
+                    : const AssetImage('assets/profile.png'),
               ),
             ),
           ),
@@ -138,8 +139,13 @@ class _TasksScreenState extends State<TasksScreen> {
               Get.bottomSheet(
                 isScrollControlled: true,
                 SettingsBottomSheet(
+                  onlUsernameChanged: (value) {
+                    taskProvider.updatelname(value);
+                  },
+                  fname: taskProvider.fnamE ?? '',
+                  lname: taskProvider.lnamE ?? '',
                   onUpdateChangeCategories: () {
-                    Get.to(() => ChooseCategoryScreen());
+                    Get.to(() => const ChooseCategoryScreen());
                   },
                   onUpdateChangePassword: () {
                     Get.to(() => ForgotPasswordScreen(
@@ -155,12 +161,11 @@ class _TasksScreenState extends State<TasksScreen> {
                       uid: taskProvider.user!.uid,
                     ));
                   },
-                  username: taskProvider.username ?? '',
                   age: taskProvider.agE ?? '',
                   gender: taskProvider.gendeR ?? '',
                   profilePicture: taskProvider.profilPicturE ?? '',
                   onUsernameChanged: (value) {
-                    taskProvider.updateUsername(value);
+                    taskProvider.updatefname(value);
                   },
                   onAgeChanged: (value) {
                     taskProvider.updateAge(value);
@@ -188,10 +193,11 @@ class _TasksScreenState extends State<TasksScreen> {
                         color: Colors.black,
                         fontSize: 16,
                         fontWeight: FontWeight.bold)),
-                taskProvider.username == null
+                taskProvider.fnamE == null
                     ? const CircularProgressIndicator()
                     : Text(
-                        taskProvider.username.toString(),
+                        taskProvider.fnamE.toString() +
+                            taskProvider.lnamE.toString(),
                         style: const TextStyle(
                           color: kPrimaryColor,
                           fontSize: 17,

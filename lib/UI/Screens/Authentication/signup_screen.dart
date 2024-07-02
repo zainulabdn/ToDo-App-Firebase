@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:haztech_task/Core/Constants/extension.dart';
 import 'package:haztech_task/Core/providers/signup_provider.dart';
 import 'package:haztech_task/UI/Screens/Authentication/login_screen.dart';
 import 'package:haztech_task/UI/custom_widgets/custom_buttons.dart';
@@ -17,7 +18,9 @@ class SignUpScreen extends StatefulWidget {
 }
 
 class _SignUpScreenState extends State<SignUpScreen> {
-  TextEditingController nameController = TextEditingController();
+  TextEditingController fnameController = TextEditingController();
+  TextEditingController lnameController = TextEditingController();
+
   TextEditingController emailController = TextEditingController();
   TextEditingController passController = TextEditingController();
   TextEditingController conPassController = TextEditingController();
@@ -53,14 +56,31 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     ),
                   ),
                   const SizedBox(height: 70),
-                  CustomTextField(
-                      prefixIcon: const Icon(
-                        Icons.person,
-                        size: 20,
-                        color: kPrimaryColor,
+                  Row(
+                    children: [
+                      Expanded(
+                        child: CustomTextField(
+                            prefixIcon: const Icon(
+                              Icons.person,
+                              size: 20,
+                              color: kPrimaryColor,
+                            ),
+                            controller: fnameController,
+                            hintText: 'First Name'),
                       ),
-                      controller: nameController,
-                      hintText: 'Name'),
+                      10.widthBox,
+                      Expanded(
+                        child: CustomTextField(
+                            prefixIcon: const Icon(
+                              Icons.person,
+                              size: 20,
+                              color: kPrimaryColor,
+                            ),
+                            controller: lnameController,
+                            hintText: 'Last Name'),
+                      ),
+                    ],
+                  ),
                   const SizedBox(height: 15),
                   DropdownButtonFormField<String>(
                     decoration: InputDecoration(
@@ -81,7 +101,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       ),
                     ),
                     value: selectedGender,
-                    items: ['Male', 'Female']
+                    items: ['Male', 'Female', 'Not Specified']
                         .map((gender) => DropdownMenuItem(
                               value: gender,
                               child: Text(gender),
@@ -159,7 +179,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       name: 'Sign Up',
                       onTap: () {
                         if (emailController.text.isEmpty ||
-                            nameController.text.isEmpty ||
+                            fnameController.text.isEmpty ||
+                            lnameController.text.isEmpty ||
                             passController.text.isEmpty ||
                             selectedGender == null ||
                             ageController.text.isEmpty) {
@@ -167,7 +188,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               'Please fill all the fields');
                         } else {
                           signupProvider.signUpWithEmailAndPassword(
-                              nameController.text,
+                              fnameController.text,
+                              lnameController.text,
                               emailController.text,
                               passController.text,
                               selectedGender.toString(),
